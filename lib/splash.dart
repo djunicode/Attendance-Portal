@@ -23,6 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
             nextScreen: Log(),
             splashTransition: SplashTransition.slideTransition,
             backgroundColor: Colors.white,
+            duration: 1000,
           ),
         ),
       ),

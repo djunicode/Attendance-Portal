@@ -1,6 +1,8 @@
+import 'package:attendance_portal/models.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:email_validator/email_validator.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'home.dart';
 
@@ -16,6 +18,7 @@ class _LogState extends State<Log> {
   final TextEditingController _passwordController = TextEditingController();
   String sap = "", password = "";
   bool hidden = true;
+  var tokens = [];
 
   final formKey = GlobalKey<FormState>();
 
@@ -206,7 +209,7 @@ class _LogState extends State<Log> {
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Password not entered';
-                                      } else if (value.length < 11) {
+                                      } else if (value.length < 7) {
                                         return "Enter minimum six characters";
                                       }
                                       return null;
@@ -249,11 +252,12 @@ class _LogState extends State<Log> {
                                     height: 55,
                                     width: 300,
                                     child: ElevatedButton(
-                                      onPressed: () {
+                                      onPressed: () async{
                                         if (formKey.currentState!.validate()) {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) => Home()));
+                                          sap = _sapController.text.trim();
+                                          password = _passwordController.text.trim();
+                                          tokens = await LoginGetTokens(sap, password);
+                                          print(tokens);
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(
@@ -287,4 +291,43 @@ class _LogState extends State<Log> {
       )),
     );
   }
+}
+
+Future<List<AutoGenerate>> getData() async {
+  List<AutoGenerate> list = [];
+  String url = "http://192.168.29.59:8021/food_userview/";
+  http.Response response = await http.get(Uri.parse(url));
+  print(response.body);
+  try {
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      var rest = data as List;
+      print(rest);
+      list = rest.map<AutoGenerate>((json) => AutoGenerate.fromJson(json)).toList();
+    } else {
+      print(response.statusCode);
+    }
+  } catch (e) {
+    print(e.toString());
+  }
+  return list;
+}
+
+Future<List<String>> LoginGetTokens(String? SAPID, String? Password) async{
+  var res = await http.post(
+    Uri.parse('http://attendanceportal.pythonanywhere.com/accounts/login/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      "sap_id": "$SAPID",
+      "password": "$Password"
+    }),
+  );
+  print(res.body);
+  Map data = jsonDecode(res.body);
+  String token1 = data['refresh'];
+  String token2 = data['access'];
+  var list = [token1, token2];
+  return list;
 }
