@@ -1,3 +1,4 @@
+import 'package:attendance_portal/Utils.dart';
 import 'package:attendance_portal/home.dart';
 import 'package:attendance_portal/splash.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const SplashScreen(),debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: messengerKey,
     );
   }
 }

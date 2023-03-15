@@ -1,10 +1,10 @@
+import 'home.dart';
+import 'package:attendance_portal/Utils.dart';
 import 'package:attendance_portal/models.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import 'home.dart';
 
 class Log extends StatefulWidget {
   const Log({Key? key}) : super(key: key);
@@ -97,8 +97,8 @@ class _LogState extends State<Log> {
                                 child: Row(
                                   children: [
                                     Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 5)),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 5)),
                                     Text(
                                       "SAP ID",
                                       style: (GoogleFonts.getFont(
@@ -115,6 +115,7 @@ class _LogState extends State<Log> {
                                 height: 10,
                               ),
                               TextFormField(
+                                keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(13),
                                     fillColor: Colors.white,
@@ -136,9 +137,9 @@ class _LogState extends State<Log> {
                                     AutovalidateMode.onUserInteraction,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Enter Sap Id';
+                                    return 'SAP ID not entered';
                                   } else if (value.length < 11) {
-                                    return "Sap Id has 11 digits";
+                                    return "SAP Id has 11 digits";
                                   }
                                   return null;
                                 },
@@ -153,8 +154,8 @@ class _LogState extends State<Log> {
                                 child: Row(
                                   children: [
                                     Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 5)),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 5)),
                                     Text(
                                       "Password",
                                       style: (GoogleFonts.getFont(
@@ -173,6 +174,7 @@ class _LogState extends State<Log> {
                               Column(
                                 children: [
                                   TextFormField(
+                                    keyboardType: TextInputType.visiblePassword,
                                     obscureText: hidden,
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.all(10),
@@ -235,11 +237,7 @@ class _LogState extends State<Log> {
                                         ),
                                       ),
                                     ),
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) => Home()));
-                                    },
+                                    onTap: () {},
                                   ),
                                 ],
                               ),
@@ -252,12 +250,27 @@ class _LogState extends State<Log> {
                                     height: 55,
                                     width: 300,
                                     child: ElevatedButton(
-                                      onPressed: () async{
+                                      onPressed: () async {
                                         if (formKey.currentState!.validate()) {
                                           sap = _sapController.text.trim();
-                                          password = _passwordController.text.trim();
-                                          tokens = await LoginGetTokens(sap, password);
+                                          password =
+                                              _passwordController.text.trim();
+                                          tokens = await LoginGetTokens(
+                                              sap, password);
                                           print(tokens);
+                                          if (tokens[0] == null) {
+                                            Utils.showSnackBar(tokens[2]);
+                                          } else {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                                    builder: (context) => Home(
+                                                          accessToken:
+                                                              tokens[1],
+                                                          refreshToken:
+                                                              tokens[0],
+                                                        )));
+                                          }
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(
@@ -303,7 +316,9 @@ Future<List<AutoGenerate>> getData() async {
       var data = jsonDecode(response.body);
       var rest = data as List;
       print(rest);
-      list = rest.map<AutoGenerate>((json) => AutoGenerate.fromJson(json)).toList();
+      list = rest
+          .map<AutoGenerate>((json) => AutoGenerate.fromJson(json))
+          .toList();
     } else {
       print(response.statusCode);
     }
@@ -313,21 +328,22 @@ Future<List<AutoGenerate>> getData() async {
   return list;
 }
 
-Future<List<String>> LoginGetTokens(String? SAPID, String? Password) async{
+Future<List<String?>> LoginGetTokens(String? SAPID, String? Password) async {
+  String? token1, token2, token3;
   var res = await http.post(
     Uri.parse('http://attendanceportal.pythonanywhere.com/accounts/login/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(<String, String>{
-      "sap_id": "$SAPID",
-      "password": "$Password"
-    }),
+    body: jsonEncode(
+        <String, String>{"sap_id": "$SAPID", "password": "$Password"}),
   );
   print(res.body);
   Map data = jsonDecode(res.body);
-  String token1 = data['refresh'];
-  String token2 = data['access'];
-  var list = [token1, token2];
+  token1 = data['refresh'];
+  token2 = data['access'];
+  token3 = data['detail'];
+  print(token3);
+  var list = [token1, token2, token3];
   return list;
 }
