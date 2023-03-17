@@ -327,28 +327,6 @@ class _LogState extends State<Log> {
   }
 }
 
-Future<List<AutoGenerate>> getData() async {
-  List<AutoGenerate> list = [];
-  String url = "http://192.168.29.59:8021/food_userview/";
-  http.Response response = await http.get(Uri.parse(url));
-  print(response.body);
-  try {
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      var rest = data as List;
-      print(rest);
-      list = rest
-          .map<AutoGenerate>((json) => AutoGenerate.fromJson(json))
-          .toList();
-    } else {
-      print(response.statusCode);
-    }
-  } catch (e) {
-    print(e.toString());
-  }
-  return list;
-}
-
 Future<List<String?>> LoginGetTokens(String? SAPID, String? Password) async {
   String? token1, token2, token3;
   var res = await http.post(

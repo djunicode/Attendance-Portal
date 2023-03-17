@@ -126,6 +126,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                                   height: 10,
                                 ),
                                 TextFormField(
+                                  controller: _passwordController,
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
                                       contentPadding: EdgeInsets.all(13),
