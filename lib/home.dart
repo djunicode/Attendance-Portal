@@ -13,7 +13,6 @@ import 'package:intl/intl.dart';
 
 
 class Home extends StatefulWidget {
-
   String? refreshToken;
   String? accessToken;
   Home({Key? key, required this.refreshToken, required this.accessToken})
@@ -227,6 +226,7 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
+
       ),
     );
   }
@@ -243,6 +243,8 @@ Widget buildSegment(String text) => Container(
         style: TextStyle(fontSize: 20),
       ),
     );
+
+
 
 Future<List<String?>> refreshLogin(String? refreshToken) async {
   String? token2, token3;
