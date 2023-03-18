@@ -1,8 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-
+import 'package:attendance_portal/HomePage.dart';
 import 'package:flutter/material.dart';
 
-import 'log.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -20,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
           child: AnimatedSplashScreen(
             splash: 'assets/images/dj sanghvi logo.png',
             splashIconSize: 100,
-            nextScreen: Log(),
+            nextScreen: HomePage(),
             splashTransition: SplashTransition.slideTransition,
             backgroundColor: Colors.white,
             duration: 1000,

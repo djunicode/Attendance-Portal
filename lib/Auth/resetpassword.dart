@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:attendance_portal/Models/Utils.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
@@ -10,7 +13,9 @@ class ResetPassword extends StatefulWidget {
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
-  final TextEditingController _passwordController = TextEditingController();
+  List<String?> list = [];
+  String? email;
+  final TextEditingController _emailController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -44,7 +49,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       backgroundColor: Color(0xFF0056D2),
                       child: IconButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.of(context).pop();
                         },
                         icon: Icon(Icons.arrow_back_sharp),
                         color: Colors.white,
@@ -97,8 +102,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                               ),
                             ),
                           ),
-                          Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10)),
+                          Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                           Container(
                             padding: EdgeInsets.only(left: 27, right: 35.0),
                             child: Column(
@@ -126,7 +130,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                                   height: 10,
                                 ),
                                 TextFormField(
-                                  controller: _passwordController,
+                                  controller: _emailController,
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
                                       contentPadding: EdgeInsets.all(13),
@@ -155,7 +159,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                                     }
                                     return null;
                                   },
-                                  onSaved: (value) {},
+                                  onSaved: (value) {
+                                    email = _emailController.text.trim();
+                                  },
                                 ),
                                 Padding(padding: EdgeInsets.all(10.0)),
                                 SizedBox(
@@ -167,16 +173,26 @@ class _ResetPasswordState extends State<ResetPassword> {
                                       height: 55,
                                       width: 300,
                                       child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () async {
+                                          if (formKey.currentState!
+                                              .validate()) {
+                                            email =
+                                                _emailController.text.trim();
+                                            list = await resetPassword(email);
+                                            if (list[0] == '200') {
+                                              Utils.showSnackBar1(list[2]);
+                                            } else {
+                                              Utils.showSnackBar(list[1]);
+                                            }
+                                          }
+                                        },
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              Color(0xFF0056D2),
+                                          backgroundColor: Color(0xFF0056D2),
                                           foregroundColor: Colors.black,
                                         ),
                                         child: Text(
                                           "Get Reset Link",
-                                          style: (GoogleFonts.getFont(
-                                              'Inter',
+                                          style: (GoogleFonts.getFont('Inter',
                                               fontSize: 24,
                                               fontWeight: FontWeight.w700,
                                               color: Colors.white)),
@@ -206,4 +222,23 @@ class _ResetPasswordState extends State<ResetPassword> {
       )),
     );
   }
+}
+
+Future<List<String?>> resetPassword(String? email) async {
+  String? token1, token2, token3;
+  var res = await http.post(
+    Uri.parse(
+        'http://attendanceportal.pythonanywhere.com/accounts/password-reset/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{"email": "$email"}),
+  );
+  print(res.body);
+  Map data = jsonDecode(res.body);
+  token1 = data['status'].toString();
+  token2 = data['error'];
+  token3 = data['message'];
+  var list = [token1, token2, token3];
+  return list;
 }

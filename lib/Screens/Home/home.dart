@@ -1,5 +1,5 @@
-import 'package:attendance_portal/Screens/CreateLectures.dart';
-import 'package:attendance_portal/Screens/postCard.dart';
+import 'package:attendance_portal/Screens/Home/CreateLectures.dart';
+import 'package:attendance_portal/Screens/Home/postCard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

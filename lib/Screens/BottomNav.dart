@@ -4,10 +4,10 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Calendar.dart';
-import 'ProfilePage.dart';
-import 'Utils.dart';
-import 'home.dart';
+import 'Calendar/Calendar.dart';
+import 'Profile/ProfilePage.dart';
+import '../Models/Utils.dart';
+import 'Home/home.dart';
 import 'package:http/http.dart' as http;
 
 Timer? _rootTimer;

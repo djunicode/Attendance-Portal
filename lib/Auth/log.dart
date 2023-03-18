@@ -1,7 +1,7 @@
-import 'package:attendance_portal/BottomNav.dart';
-import 'package:attendance_portal/resetpassword.dart';
+import 'package:attendance_portal/Screens/BottomNav.dart';
+import 'package:attendance_portal/Auth/resetpassword.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:attendance_portal/Utils.dart';
+import 'package:attendance_portal/Models/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -258,7 +258,6 @@ class _LogState extends State<Log> {
                                               ),
                                             ),
                                             onTap: () {
-                                              Navigator.of(context).pop();
                                               Navigator.of(context)
                                                   .push(MaterialPageRoute(
                                                 builder: (context) =>
