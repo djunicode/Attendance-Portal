@@ -1,0 +1,80 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../Models/Utils.dart';
+import '../Auth/log.dart';
+
+class ProfilePage extends StatefulWidget {
+  String? refreshToken;
+  String? accessToken;
+  ProfilePage({Key? key, required this.refreshToken, required this.accessToken})
+      : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  bool flag = false;
+  var tokens = [];
+  var logout = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Profile Page"),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            Padding(padding: EdgeInsets.all(10.0)),
+            Padding(padding: EdgeInsets.all(10.0)),
+            ElevatedButton(
+              child: Text("Logout"),
+              onPressed: () async {
+                tokens = await Logout(widget.refreshToken);
+                if (tokens[0] == "200") {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  await prefs.setBool('flag', false);
+                  await prefs.setString('accessToken', '');
+                  await prefs.setString('refreshToken', '');
+                  Utils.showSnackBar1(tokens[1]);
+                  Navigator.of(context).pop();
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => Log()));
+                } else {
+                  Utils.showSnackBar(tokens[2]);
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Future<List<String?>> Logout(String? refreshToken) async {
+  String? token1, token2, token3;
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  refreshToken = prefs.getString('refreshToken');
+  var res = await http.post(
+    Uri.parse('http://attendanceportal.pythonanywhere.com/accounts/logout/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{"refresh": "$refreshToken"}),
+  );
+  print(res.body);
+  Map data = jsonDecode(res.body);
+  token1 = data['error'];
+  token2 = data['status'].toString();
+  token3 = data['message'];
+  var list = [token2, token3, token1];
+  print(list);
+  return list;
+}

@@ -35,6 +35,11 @@ dependencies:
   email_validator: ^2.1.17
   animated_splash_screen: ^1.3.0
   http: ^0.13.5
+  animated_bottom_navigation_bar:
+  syncfusion_flutter_calendar: ^20.4.51
+  intl: ^0.18.0
+  day_picker: ^2.1.1
+  flutter_svg: ^2.0.4
 
 
 
@@ -82,10 +87,18 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+
+  fonts:
+     - family: Montserrat
+       fonts:
+         - asset: fonts/Montserrat-VariableFont_wght.ttf
+         - asset: fonts/Montserrat-Bold.ttf
+
   # fonts:
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
+
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
