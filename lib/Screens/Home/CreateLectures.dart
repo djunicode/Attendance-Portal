@@ -92,7 +92,7 @@ class _CreateLecturesState extends State<CreateLectures> {
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                 ),
                 SizedBox(
-                  width: 135,
+                  width: 130,
                 ),
                 Icon(Icons.calendar_month_sharp)
               ],
