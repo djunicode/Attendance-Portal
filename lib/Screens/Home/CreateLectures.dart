@@ -73,10 +73,14 @@ class _CreateLecturesState extends State<CreateLectures> {
   String? value2;
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var height = size.height;
+    var width = size.width;
+
     DateTime now = DateTime.now().add(Duration(days: 1));
     String formattedDate = DateFormat.MMMEd().format(now);
     return SizedBox(
-      height: 456,
+      height: height*0.6,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(32, 32, 32, 25.0),
         child: Column(
@@ -92,7 +96,7 @@ class _CreateLecturesState extends State<CreateLectures> {
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                 ),
                 SizedBox(
-                  width: 135,
+                  width: width*0.14,
                 ),
                 Icon(Icons.calendar_month_sharp)
               ],
@@ -126,6 +130,7 @@ class _CreateLecturesState extends State<CreateLectures> {
               height: 15,
             ),
             Container(
+              height: height*0.06,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black, width: 1),
                 borderRadius: BorderRadius.circular(10),
@@ -157,8 +162,8 @@ class _CreateLecturesState extends State<CreateLectures> {
                   GestureDetector(
                     onTap: _showTimePickerfrom,
                     child: Container(
-                      height: 60,
-                      width: 154,
+                      height: height*0.06,
+                      width: width*0.35,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
@@ -179,8 +184,8 @@ class _CreateLecturesState extends State<CreateLectures> {
                   GestureDetector(
                     onTap: _showTimePickerto,
                     child: Container(
-                      height: 60,
-                      width: 154,
+                      height: height*0.06,
+                      width: width*0.35,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
@@ -191,7 +196,7 @@ class _CreateLecturesState extends State<CreateLectures> {
                           child: Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
+                            padding: const EdgeInsets.only(left: 20.0),
                             child: Text("To "),
                           ),
                           Text(
@@ -210,6 +215,7 @@ class _CreateLecturesState extends State<CreateLectures> {
               height: 20,
             ),
             Container(
+              height: height*0.06,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black, width: 1),
                 borderRadius: BorderRadius.circular(10),
