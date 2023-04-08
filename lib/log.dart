@@ -264,12 +264,10 @@ class _LogState extends State<Log> {
                                     width: 300,
                                     child: ElevatedButton(
                                       onPressed: () async {
-                                        if (formKey.currentState!.validate()) {
-                                          sap = _sapController.text.trim();
-                                          password =
-                                              _passwordController.text.trim();
-                                          tokens = await LoginGetTokens(
-                                              sap, password);
+                                        if (formKey.currentState!.validate())
+                                        {sap = _sapController.text.trim();
+                                          password = _passwordController.text.trim();
+                                          tokens = await LoginGetTokens(sap, password);
                                           print(tokens);
                                           if (tokens[0] == null) {
                                             Utils.showSnackBar(tokens[2]);
