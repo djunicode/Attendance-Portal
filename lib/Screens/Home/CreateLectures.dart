@@ -1,7 +1,10 @@
+import 'package:attendance_portal/Models/Utils.dart';
 import 'package:day_picker/day_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class CreateLectures extends StatefulWidget {
   const CreateLectures({Key? key}) : super(key: key);
@@ -13,6 +16,11 @@ class CreateLectures extends StatefulWidget {
 class _CreateLecturesState extends State<CreateLectures> {
   TimeOfDay _timeOfDayfrom = TimeOfDay(hour: 12, minute: 30);
   TimeOfDay _timeOfDayto = TimeOfDay(hour: 12, minute: 30);
+  late final int _subject;
+  late final String?  _startTime ;
+  late final String?  _endTime ;
+  late final int?  _batch ;
+
 
   void _showTimePickerfrom() {
     showTimePicker(
@@ -21,6 +29,7 @@ class _CreateLecturesState extends State<CreateLectures> {
     ).then((value) {
       setState(() {
         _timeOfDayfrom = value!;
+        _startTime = value! as String?;
       });
     });
   }
@@ -32,6 +41,8 @@ class _CreateLecturesState extends State<CreateLectures> {
     ).then((value) {
       setState(() {
         _timeOfDayto = value!;
+        _endTime = value! as String;
+
       });
     });
   }
@@ -57,9 +68,11 @@ class _CreateLecturesState extends State<CreateLectures> {
   ];
 
   final list1 = [
-    "     Two Times",
-    "     Three Times",
-    "     Four Times",
+    "     Maths",
+    "     FLAT",
+    "     AOA",
+    "     UHV",
+    "     OS",
   ];
 
   final list2 = [
@@ -71,6 +84,7 @@ class _CreateLecturesState extends State<CreateLectures> {
 
   String? value1;
   String? value2;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -147,6 +161,7 @@ class _CreateLecturesState extends State<CreateLectures> {
                   onChanged: (value) {
                     setState(() {
                       this.value2 = value;
+                      _batch = value as int?;
                     });
                   },
                 ),
@@ -224,7 +239,7 @@ class _CreateLecturesState extends State<CreateLectures> {
                 child: DropdownButton<String>(
                   hint: Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: const Text("Frequency: "),
+                    child: const Text("Subject: "),
                   ),
                   value: value1,
                   isExpanded: true,
@@ -232,6 +247,7 @@ class _CreateLecturesState extends State<CreateLectures> {
                   onChanged: (value) {
                     setState(() {
                       this.value1 = value;
+                      _subject = value as int;
                     });
                   },
                 ),
@@ -249,7 +265,18 @@ class _CreateLecturesState extends State<CreateLectures> {
                 color: Color(0xff0056D2),
               ),
               child: InkWell(
-                onTap: () {
+                onTap: () async {
+                  await createLecture(
+                      '61',
+                      '12:00',
+                      '1:00',
+                      '2023-05-21',
+                      'note',
+                      true,
+                      1,
+                      9,
+                      2,
+                  );
                   Navigator.pop(context);
                 },
                 borderRadius: BorderRadius.circular(10),
@@ -277,4 +304,51 @@ class _CreateLecturesState extends State<CreateLectures> {
         item,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
       ));
+}
+
+Future<String?> createLecture(
+  String? roomNumber,
+  String? startTime,
+  String? endTime,
+  String? date,
+  String? note,
+  bool? attendanceTaken,
+  int? teacher,
+  int? batch,
+  int? subject,
+) async {
+  String? lecId;
+  var res = await http.post(
+    Uri.parse('http://attendanceportal.pythonanywhere.com/attendance/lecture/'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(
+        <String, String>{
+          "roomNumber": "$roomNumber",
+          "endTime": "$endTime",
+          "startTime": "$startTime",
+          "date": "$date",
+          "note": "$note",
+          "attendanceTaken": "$attendanceTaken",
+          "teacher": "$teacher",
+          "batch": "$batch",
+          "subject": "$subject",
+        }),
+  );
+  print(res.statusCode);
+  print(res.body);
+  if(res.statusCode == 201){
+    Utils.showSnackBar2(res.body);
+  }
+  else{
+    Utils.showSnackBar1("Enter correct value");
+  }
+  Map data = jsonDecode(res.body);
+  //print(data);
+
+  lecId = data["lecture_id"].toString();
+  print(lecId);
+
+  return lecId;
 }
