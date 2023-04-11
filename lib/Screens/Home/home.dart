@@ -25,7 +25,7 @@ class _HomeState extends State<Home> {
                 padding: const EdgeInsets.fromLTRB(31.0, 19, 200, 0.0),
                 child: index <= 4
                     ? Text(
-                        "Mar 4 Tomorrow",
+                        "Mar 4 Tomorrow ",
                         style: TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 16),
                       )
@@ -65,10 +65,13 @@ class _HomeState extends State<Home> {
     DateTime now = DateTime.now().add(Duration(days: 1));
     String formattedDate = DateFormat.MMMEd().format(now);
     print(formattedDate);
+    var size = MediaQuery.of(context).size;
+    var height = size.height;
+    var width = size.width;
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 90,
+        toolbarHeight: height*0.12,
         elevation: 0.0,
         backgroundColor: Colors.white,
         title: Text(
@@ -76,7 +79,7 @@ class _HomeState extends State<Home> {
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w700,
-              fontSize: 31.42),
+              fontSize: height*0.045),
         ),
         actions: [
           IconButton(
@@ -94,18 +97,19 @@ class _HomeState extends State<Home> {
                     context: context,
                     builder: (BuildContext context) {
                       return SizedBox(
-                        height: 152,
-                        width: 390,
+                        height: height*0.19,
+                        width: width*0.3,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 24.0),
+                          padding: const EdgeInsets.only(top: 20.0),
                           child: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                    107.0, 0, 34, 0.0),
+                                padding:  EdgeInsets.fromLTRB(
+                                    width*0.21, 0, 0, 0.0),
                                 child: Row(
                                   children: [
                                     Icon(Icons.add_circle_outline),
+                                    SizedBox(width: 4,),
                                     TextButton(
                                         onPressed: () {
                                           Navigator.of(context).pop();
@@ -117,7 +121,7 @@ class _HomeState extends State<Home> {
                                         child: Text(
                                           "Create a lecture",
                                           style: TextStyle(
-                                              fontSize: 16,
+                                              fontSize: height*0.024,
                                               fontWeight: FontWeight.w600),
                                         )),
                                   ],
@@ -128,16 +132,17 @@ class _HomeState extends State<Home> {
                                 thickness: 2,
                               ),
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                    107.0, 0, 34, 0.0),
+                                padding: EdgeInsets.fromLTRB(
+                                    width*0.21, 0, 0, 0.0),
                                 child: Row(
                                   children: [
                                     Icon(Icons.people),
+                                    SizedBox(width: 4,),
                                     TextButton(
                                         onPressed: () {},
                                         child: Text("Create a new batch",
                                             style: TextStyle(
-                                                fontSize: 16,
+                                                fontSize: height*0.024,
                                                 fontWeight:
                                                     FontWeight.w600))),
                                   ],
@@ -163,7 +168,7 @@ class _HomeState extends State<Home> {
             padding: EdgeInsets.all(10.0),
           ),
           SizedBox(
-            width: 500.0,
+            width: width*0.96,
             child: CupertinoSegmentedControl<int>(
               selectedColor: Color(0xff0056D2),
               children: {
