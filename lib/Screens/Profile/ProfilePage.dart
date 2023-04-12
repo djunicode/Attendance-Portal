@@ -21,36 +21,88 @@ class _ProfilePageState extends State<ProfilePage> {
   var tokens = [];
   var logout = [];
 
+
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var height = size.height;
+    var width = size.width;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile Page"),
-      ),
-      body: Center(
-        child: Column(
+        toolbarHeight: height*0.12,
+        elevation: 0.7,
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: Column(
           children: [
-            Padding(padding: EdgeInsets.all(10.0)),
-            Padding(padding: EdgeInsets.all(10.0)),
-            ElevatedButton(
-              child: Text("Logout"),
-              onPressed: () async {
-                tokens = await Logout(widget.refreshToken);
-                if (tokens[0] == "200") {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  await prefs.setBool('flag', false);
-                  await prefs.setString('accessToken', '');
-                  await prefs.setString('refreshToken', '');
-                  Utils.showSnackBar1(tokens[1]);
-                  Navigator.of(context).pop();
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => Log()));
-                } else {
-                  Utils.showSnackBar(tokens[2]);
-                }
-              },
+            Text("Name",
+            style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 28,fontFamily: 'Montserrat'),
             ),
+            Text("Assistant Professor",
+              style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 15),
+            ),
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 10,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text("Your Batches",
+                  style: TextStyle(fontWeight: FontWeight.w800,fontFamily: 'Montserrat',fontSize:18 ),
+                ),
+                ElevatedButton(
+                  child: Text("Logout"),
+                  onPressed: () async {
+                    tokens = await Logout(widget.refreshToken);
+                    if (tokens[0] == "200") {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setBool('flag', false);
+                      await prefs.setString('accessToken', '');
+                      await prefs.setString('refreshToken', '');
+                      Utils.showSnackBar1(tokens[1]);
+                      Navigator.of(context).pop();
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) => Log()));
+                    } else {
+                      Utils.showSnackBar(tokens[2]);
+                    }
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 10,),
+            Divider(thickness: 1,color: Colors.black,),
+            ListView.builder(
+              physics: ClampingScrollPhysics(),
+              shrinkWrap: true,
+                itemCount: 20,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    shape: Border(
+                      bottom: BorderSide(),
+                    ),
+                    onTap: () {},
+                    trailing: IconButton(
+                      onPressed: () {  },
+                      icon: Icon(Icons.arrow_forward_ios),
+                    ),
+                    title: Text("SE Computer Engineering - A1",
+                      style: TextStyle(fontWeight: FontWeight.w700,fontFamily: 'Montserrat',fontSize: 12),
+                    ),
+                    subtitle: Text("Maths",
+                      style: TextStyle(fontWeight: FontWeight.bold,),
+
+                    ),
+                  );
+                }),
           ],
         ),
       ),
