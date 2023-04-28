@@ -1,3 +1,4 @@
+import 'package:attendance_portal/Screens/BatchDetails.dart';
 import 'package:attendance_portal/Screens/Home/CreateLectures.dart';
 import 'package:attendance_portal/Screens/Home/postCard.dart';
 import 'package:flutter/cupertino.dart';
@@ -142,7 +143,14 @@ class _HomeState extends State<Home> {
                                       width: 4,
                                     ),
                                     TextButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    BatchDetails()),
+                                          );
+                                        },
                                         child: Text("Create a new batch",
                                             style: TextStyle(
                                                 fontSize: height * 0.024,

@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:attendance_portal/Screens/LectureDetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'BatchDetails.dart';
 import 'Calendar/Calendar.dart';
 import 'Profile/ProfilePage.dart';
 import '../Models/Utils.dart';
@@ -64,7 +66,7 @@ class _BottomNavState extends State<BottomNav> {
       Calendar(),
       ProfilePage(
         accessToken: widget.accessToken,
-        refreshToken: widget.refreshToken,
+        refreshToken: widget.accessToken,
       ),
     ];
 

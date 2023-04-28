@@ -57,6 +57,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: TextStyle(fontWeight: FontWeight.w800,fontFamily: 'Montserrat',fontSize:18 ),
                 ),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xff0056D2),
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      ),
                   child: Text("Logout"),
                   onPressed: () async {
                     tokens = await Logout(widget.refreshToken);
