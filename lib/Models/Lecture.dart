@@ -11,14 +11,14 @@ class CreateLecture {
 
   CreateLecture(
       {this.roomNumber,
-        this.startTime,
-        this.endTime,
-        this.date,
-        this.note,
-        this.attendanceTaken,
-        this.teacher,
-        this.batch,
-        this.subject});
+      this.startTime,
+      this.endTime,
+      this.date,
+      this.note,
+      this.attendanceTaken,
+      this.teacher,
+      this.batch,
+      this.subject});
 
   CreateLecture.fromJson(Map<String, dynamic> json) {
     roomNumber = json['room_number'];

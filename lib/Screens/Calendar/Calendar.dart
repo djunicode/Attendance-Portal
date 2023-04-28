@@ -12,7 +12,6 @@ class Calendar extends StatefulWidget {
 class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
-
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;

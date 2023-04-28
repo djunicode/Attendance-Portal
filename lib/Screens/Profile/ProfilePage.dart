@@ -20,7 +20,6 @@ class _ProfilePageState extends State<ProfilePage> {
   var tokens = [];
   var logout = [];
 
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -29,17 +28,26 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: height*0.12,
+        toolbarHeight: height * 0.12,
         elevation: 0.7,
         backgroundColor: Colors.white,
         centerTitle: true,
         title: Column(
           children: [
-            Text("Name",
-            style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 28,fontFamily: 'Montserrat'),
+            Text(
+              "Name",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 28,
+                  fontFamily: 'Montserrat'),
             ),
-            Text("Assistant Professor",
-              style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 15),
+            Text(
+              "Assistant Professor",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15),
             ),
           ],
         ),
@@ -48,19 +56,25 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               mainAxisSize: MainAxisSize.max,
               children: [
-                Text("Your Batches",
-                  style: TextStyle(fontWeight: FontWeight.w800,fontFamily: 'Montserrat',fontSize:18 ),
+                Text(
+                  "Your Batches",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontFamily: 'Montserrat',
+                      fontSize: 18),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff0056D2),
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      ),
+                    backgroundColor: Color(0xff0056D2),
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                  ),
                   child: Text("Logout"),
                   onPressed: () async {
                     tokens = await Logout(widget.refreshToken);
@@ -81,11 +95,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ],
             ),
-            SizedBox(height: 10,),
-            Divider(thickness: 1,color: Colors.black,),
+            SizedBox(
+              height: 10,
+            ),
+            Divider(
+              thickness: 1,
+              color: Colors.black,
+            ),
             ListView.builder(
-              physics: ClampingScrollPhysics(),
-              shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                shrinkWrap: true,
                 itemCount: 20,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
@@ -94,15 +113,21 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     onTap: () {},
                     trailing: IconButton(
-                      onPressed: () {  },
+                      onPressed: () {},
                       icon: Icon(Icons.arrow_forward_ios),
                     ),
-                    title: Text("SE Computer Engineering - A1",
-                      style: TextStyle(fontWeight: FontWeight.w700,fontFamily: 'Montserrat',fontSize: 12),
+                    title: Text(
+                      "SE Computer Engineering - A1",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'Montserrat',
+                          fontSize: 12),
                     ),
-                    subtitle: Text("Maths",
-                      style: TextStyle(fontWeight: FontWeight.bold,),
-
+                    subtitle: Text(
+                      "Maths",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   );
                 }),
