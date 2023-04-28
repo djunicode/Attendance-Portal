@@ -27,11 +27,17 @@ class _BottomNavState extends State<BottomNav> {
 
   void initializeTimer() {
     const time = Duration(seconds: 10);
-    _rootTimer = Timer(time, () async {
+    _rootTimer = Timer.periodic(time, (timer) async {
       var prefs = await SharedPreferences.getInstance();
       tokens = await refreshLogin(tokens[0]);
-      prefs.setString('accessToken', tokens[0]);
-      Utils.showSnackBar1("Token refreshed!");
+
+      if (tokens[0] == null) {
+        Utils.showSnackBar(tokens[1]);
+        _rootTimer?.cancel();
+      } else {
+        prefs.setString('accessToken', tokens[0]);
+        Utils.showSnackBar1("Token refreshed!");
+      }
     });
   }
 

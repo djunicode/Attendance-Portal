@@ -16,11 +16,10 @@ class CreateLectures extends StatefulWidget {
 class _CreateLecturesState extends State<CreateLectures> {
   TimeOfDay _timeOfDayfrom = TimeOfDay(hour: 12, minute: 30);
   TimeOfDay _timeOfDayto = TimeOfDay(hour: 12, minute: 30);
-  late final int _subject;
-  late final String?  _startTime ;
-  late final String?  _endTime ;
-  late final int?  _batch ;
-
+  String? _subject;
+  String? _startTime;
+  String? _endTime;
+  String? _batch;
 
   void _showTimePickerfrom() {
     showTimePicker(
@@ -29,7 +28,7 @@ class _CreateLecturesState extends State<CreateLectures> {
     ).then((value) {
       setState(() {
         _timeOfDayfrom = value!;
-        _startTime = value! as String?;
+        _startTime = value!.toString();
       });
     });
   }
@@ -41,8 +40,7 @@ class _CreateLecturesState extends State<CreateLectures> {
     ).then((value) {
       setState(() {
         _timeOfDayto = value!;
-        _endTime = value! as String;
-
+        _endTime = value!.toString();
       });
     });
   }
@@ -153,15 +151,15 @@ class _CreateLecturesState extends State<CreateLectures> {
                 child: DropdownButton<String>(
                   hint: Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: const Text("Select Batch:"),
+                    child: const Text("Select Batch"),
                   ),
                   value: value2,
                   isExpanded: true,
                   items: list2.map(buildMenuItem).toList(),
                   onChanged: (value) {
                     setState(() {
-                      this.value2 = value;
-                      _batch = value as int?;
+                      value2 = value;
+                      _batch = value!;
                     });
                   },
                 ),
@@ -239,15 +237,15 @@ class _CreateLecturesState extends State<CreateLectures> {
                 child: DropdownButton<String>(
                   hint: Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: const Text("Subject: "),
+                    child: const Text("Select Subject "),
                   ),
                   value: value1,
                   isExpanded: true,
                   items: list1.map(buildMenuItem).toList(),
                   onChanged: (value) {
                     setState(() {
-                      this.value1 = value;
-                      _subject = value as int;
+                      value1 = value;
+                      _subject = value!;
                     });
                   },
                 ),
@@ -267,15 +265,15 @@ class _CreateLecturesState extends State<CreateLectures> {
               child: InkWell(
                 onTap: () async {
                   await createLecture(
-                      '61',
-                      '12:00',
-                      '1:00',
-                      '2023-05-21',
-                      'note',
-                      true,
-                      1,
-                      9,
-                      2,
+                    '61',
+                    '12:00',
+                    '1:00',
+                    '2023-05-21',
+                    'note',
+                    true,
+                    1,
+                    9,
+                    2,
                   );
                   Navigator.pop(context);
                 },
@@ -323,31 +321,28 @@ Future<String?> createLecture(
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(
-        <String, String>{
-          "roomNumber": "$roomNumber",
-          "endTime": "$endTime",
-          "startTime": "$startTime",
-          "date": "$date",
-          "note": "$note",
-          "attendanceTaken": "$attendanceTaken",
-          "teacher": "$teacher",
-          "batch": "$batch",
-          "subject": "$subject",
-        }),
+    body: jsonEncode(<String, String>{
+      "roomNumber": "$roomNumber",
+      "endTime": "$endTime",
+      "startTime": "$startTime",
+      "date": "$date",
+      "note": "$note",
+      "attendanceTaken": "$attendanceTaken",
+      "teacher": "$teacher",
+      "batch": "$batch",
+      "subject": "$subject",
+    }),
   );
   print(res.statusCode);
   print(res.body);
-  if(res.statusCode == 201){
+  if (res.statusCode == 201) {
     Utils.showSnackBar2(res.body);
-  }
-  else{
+  } else {
     Utils.showSnackBar1("Enter correct value");
   }
   Map data = jsonDecode(res.body);
-  //print(data);
 
-  lecId = data["lecture_id"].toString();
+  lecId = data["lecture"]["date"].toString();
   print(lecId);
 
   return lecId;

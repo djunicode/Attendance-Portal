@@ -22,8 +22,8 @@ class _PostCardState extends State<PostCard> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Color(0xFFdedede), width: 1)),
-        height: height*0.3,
-        width: width*0.88,
+        height: height * 0.3,
+        width: width * 0.88,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -41,10 +41,10 @@ class _PostCardState extends State<PostCard> {
             Row(
               children: [
                 Padding(
-                  padding:  EdgeInsets.fromLTRB(
+                  padding: EdgeInsets.fromLTRB(
                     20.0,
                     0.0,
-                    width*0.08,
+                    width * 0.08,
                     0,
                   ),
                   child: Text(
