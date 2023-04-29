@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:attendance_portal/Screens/LectureDetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'BatchDetails.dart';
 import 'Calendar/Calendar.dart';
 import 'Profile/ProfilePage.dart';
 import '../Models/Utils.dart';
@@ -29,13 +27,11 @@ class _BottomNavState extends State<BottomNav> {
 
   void initializeTimer() {
     const time = Duration(seconds: 10);
-    _rootTimer = Timer.periodic(time, (timer) async {
+    _rootTimer = Timer(time, () async {
       var prefs = await SharedPreferences.getInstance();
       tokens = await refreshLogin(tokens[0]);
-
       if (tokens[0] == null) {
         Utils.showSnackBar(tokens[1]);
-        _rootTimer?.cancel();
       } else {
         prefs.setString('accessToken', tokens[0]);
         Utils.showSnackBar1("Token refreshed!");
@@ -70,27 +66,25 @@ class _BottomNavState extends State<BottomNav> {
       ),
     ];
 
-    return SafeArea(
-      child: Scaffold(
-        bottomNavigationBar: AnimatedBottomNavigationBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          activeColor: Color(0xff0056D2),
-          inactiveColor: Colors.grey,
-          icons: iconList,
-          activeIndex: _selectedIndex,
-          notchSmoothness: NotchSmoothness.smoothEdge,
-          onTap: (index) {
-            setState(() {
-              print(index);
-              _selectedIndex = index;
-            });
-          },
-          gapWidth: 3,
-          //other params
-        ),
-        body: _widgetOptions.elementAt(_selectedIndex),
+    return Scaffold(
+      bottomNavigationBar: AnimatedBottomNavigationBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        activeColor: Color(0xff0056D2),
+        inactiveColor: Colors.grey,
+        icons: iconList,
+        activeIndex: _selectedIndex,
+        notchSmoothness: NotchSmoothness.smoothEdge,
+        onTap: (index) {
+          setState(() {
+            print(index);
+            _selectedIndex = index;
+          });
+        },
+        gapWidth: 3,
+        //other params
       ),
+      body: _widgetOptions.elementAt(_selectedIndex),
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:attendance_portal/Screens/BatchDetails.dart';
+import 'package:attendance_portal/Screens/Home/BatchDetails.dart';
 import 'package:attendance_portal/Screens/Home/CreateLectures.dart';
 import 'package:attendance_portal/Screens/Home/postCard.dart';
 import 'package:flutter/cupertino.dart';
