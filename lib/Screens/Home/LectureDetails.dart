@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../Models/Utils.dart';
-import '../../Auth/log.dart';
+import '../../../Models/Utils.dart';
+import '../../../Auth/log.dart';
 
 class LectureDetails extends StatefulWidget {
   LectureDetails({Key? key}) : super(key: key);

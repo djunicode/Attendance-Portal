@@ -24,14 +24,18 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   var tokens = [];
+  var t;
 
   void initializeTimer() {
     const time = Duration(seconds: 10);
-    _rootTimer = Timer(time, () async {
+    _rootTimer = Timer.periodic(time, (timer) async {
       var prefs = await SharedPreferences.getInstance();
-      tokens = await refreshLogin(tokens[0]);
-      if (tokens[0] == null) {
+      t = await refreshLogin(tokens[0]);
+      tokens[1] = t[0];
+      print(tokens);
+      if (tokens[1] == null) {
         Utils.showSnackBar(tokens[1]);
+        timer.cancel();
       } else {
         prefs.setString('accessToken', tokens[0]);
         Utils.showSnackBar1("Token refreshed!");
@@ -41,7 +45,7 @@ class _BottomNavState extends State<BottomNav> {
 
   int groupValue = 0;
   List<IconData> iconList = [
-    Icons.home,
+    Icons.home_filled,
     Icons.calendar_month_sharp,
     Icons.person,
   ];

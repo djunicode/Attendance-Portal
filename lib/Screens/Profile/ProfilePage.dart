@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:attendance_portal/Screens/Home/BatchDetails.dart';
-import 'package:attendance_portal/Screens/LectureDetails.dart';
+import 'package:attendance_portal/Screens/Home/LectureDetails.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Models/Utils.dart';
 import '../../Auth/log.dart';
+import 'package:attendance_portal/Screens/BottomNav.dart' as bottom;
 
 class ProfilePage extends StatefulWidget {
   String? refreshToken;
