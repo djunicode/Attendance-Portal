@@ -27,7 +27,7 @@ class _BottomNavState extends State<BottomNav> {
   var t;
 
   void initializeTimer() {
-    const time = Duration(seconds: 10);
+    const time = Duration(minutes: 20);
     _rootTimer = Timer.periodic(time, (timer) async {
       var prefs = await SharedPreferences.getInstance();
       t = await refreshLogin(tokens[0]);
