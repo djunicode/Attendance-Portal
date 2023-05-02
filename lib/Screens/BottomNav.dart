@@ -24,20 +24,28 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   var tokens = [];
+  var t;
 
   void initializeTimer() {
-    const time = Duration(seconds: 10);
-    _rootTimer = Timer(time, () async {
+    const time = Duration(minutes: 20);
+    _rootTimer = Timer.periodic(time, (timer) async {
       var prefs = await SharedPreferences.getInstance();
-      tokens = await refreshLogin(tokens[0]);
-      prefs.setString('accessToken', tokens[0]);
-      Utils.showSnackBar1("Token refreshed!");
+      t = await refreshLogin(tokens[0]);
+      tokens[1] = t[0];
+      print(tokens);
+      if (tokens[1] == null) {
+        Utils.showSnackBar(tokens[1]);
+        timer.cancel();
+      } else {
+        prefs.setString('accessToken', tokens[0]);
+        Utils.showSnackBar1("Token refreshed!");
+      }
     });
   }
 
   int groupValue = 0;
   List<IconData> iconList = [
-    Icons.home,
+    Icons.home_filled,
     Icons.calendar_month_sharp,
     Icons.person,
   ];
@@ -58,31 +66,29 @@ class _BottomNavState extends State<BottomNav> {
       Calendar(),
       ProfilePage(
         accessToken: widget.accessToken,
-        refreshToken: widget.refreshToken,
+        refreshToken: widget.accessToken,
       ),
     ];
 
-    return SafeArea(
-      child: Scaffold(
-        bottomNavigationBar: AnimatedBottomNavigationBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          activeColor: Color(0xff0056D2),
-          inactiveColor: Colors.grey,
-          icons: iconList,
-          activeIndex: _selectedIndex,
-          notchSmoothness: NotchSmoothness.smoothEdge,
-          onTap: (index) {
-            setState(() {
-              print(index);
-              _selectedIndex = index;
-            });
-          },
-          gapWidth: 3,
-          //other params
-        ),
-        body: _widgetOptions.elementAt(_selectedIndex),
+    return Scaffold(
+      bottomNavigationBar: AnimatedBottomNavigationBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        activeColor: Color(0xff0056D2),
+        inactiveColor: Colors.grey,
+        icons: iconList,
+        activeIndex: _selectedIndex,
+        notchSmoothness: NotchSmoothness.smoothEdge,
+        onTap: (index) {
+          setState(() {
+            print(index);
+            _selectedIndex = index;
+          });
+        },
+        gapWidth: 3,
+        //other params
       ),
+      body: _widgetOptions.elementAt(_selectedIndex),
     );
   }
 }

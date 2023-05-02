@@ -18,7 +18,7 @@ class _LogState extends State<Log> {
   final TextEditingController _sapController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String sap = "", password = "";
-  bool hidden = true;
+  bool hidden = true, isLoading = false;
   var tokens = [];
 
   final formKey = GlobalKey<FormState>();
@@ -291,6 +291,9 @@ class _LogState extends State<Log> {
                                                     Utils.showSnackBar(
                                                         tokens[2]);
                                                   } else {
+                                                    setState(() {
+                                                      isLoading = !isLoading;
+                                                    });
                                                     SharedPreferences prefs =
                                                         await SharedPreferences
                                                             .getInstance();
@@ -325,14 +328,23 @@ class _LogState extends State<Log> {
                                                     Color(0xFF0056D2),
                                                 foregroundColor: Colors.black,
                                               ),
-                                              child: Text(
-                                                "Sign In",
-                                                style: (GoogleFonts.getFont(
-                                                    'Inter',
-                                                    fontSize: 24,
-                                                    fontWeight: FontWeight.w700,
-                                                    color: Colors.white)),
-                                              ),
+                                              child: !isLoading
+                                                  ? Text("Sign In",
+                                                      style:
+                                                          (GoogleFonts.getFont(
+                                                              'Inter',
+                                                              fontSize: 24,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color: Colors
+                                                                  .white)))
+                                                  : Center(
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
                                             )),
                                       ),
                                       SizedBox(
@@ -374,4 +386,3 @@ Future<List<String?>> LoginGetTokens(String? SAPID, String? Password) async {
   var list = [token1, token2, token3];
   return list;
 }
-

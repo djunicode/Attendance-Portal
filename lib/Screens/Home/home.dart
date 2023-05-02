@@ -1,3 +1,4 @@
+import 'package:attendance_portal/Screens/Home/BatchDetails.dart';
 import 'package:attendance_portal/Screens/Home/CreateLectures.dart';
 import 'package:attendance_portal/Screens/Home/postCard.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
-  Home({Key? key})
-      : super(key: key);
+  Home({Key? key}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: height*0.12,
+        toolbarHeight: height * 0.12,
         elevation: 0.0,
         backgroundColor: Colors.white,
         title: Text(
@@ -79,7 +79,7 @@ class _HomeState extends State<Home> {
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w700,
-              fontSize: height*0.045),
+              fontSize: height * 0.045),
         ),
         actions: [
           IconButton(
@@ -97,19 +97,21 @@ class _HomeState extends State<Home> {
                     context: context,
                     builder: (BuildContext context) {
                       return SizedBox(
-                        height: height*0.19,
-                        width: width*0.3,
+                        height: height * 0.19,
+                        width: width * 0.3,
                         child: Padding(
                           padding: const EdgeInsets.only(top: 20.0),
                           child: Column(
                             children: [
                               Padding(
-                                padding:  EdgeInsets.fromLTRB(
-                                    width*0.21, 0, 0, 0.0),
+                                padding: EdgeInsets.fromLTRB(
+                                    width * 0.21, 0, 0, 0.0),
                                 child: Row(
                                   children: [
                                     Icon(Icons.add_circle_outline),
-                                    SizedBox(width: 4,),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
                                     TextButton(
                                         onPressed: () {
                                           Navigator.of(context).pop();
@@ -121,7 +123,7 @@ class _HomeState extends State<Home> {
                                         child: Text(
                                           "Create a lecture",
                                           style: TextStyle(
-                                              fontSize: height*0.024,
+                                              fontSize: height * 0.024,
                                               fontWeight: FontWeight.w600),
                                         )),
                                   ],
@@ -133,18 +135,26 @@ class _HomeState extends State<Home> {
                               ),
                               Padding(
                                 padding: EdgeInsets.fromLTRB(
-                                    width*0.21, 0, 0, 0.0),
+                                    width * 0.21, 0, 0, 0.0),
                                 child: Row(
                                   children: [
                                     Icon(Icons.people),
-                                    SizedBox(width: 4,),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
                                     TextButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    BatchDetails()),
+                                          );
+                                        },
                                         child: Text("Create a new batch",
                                             style: TextStyle(
-                                                fontSize: height*0.024,
-                                                fontWeight:
-                                                    FontWeight.w600))),
+                                                fontSize: height * 0.024,
+                                                fontWeight: FontWeight.w600))),
                                   ],
                                 ),
                               )
@@ -160,15 +170,13 @@ class _HomeState extends State<Home> {
               )),
         ],
       ),
-
-
       body: Column(
         children: <Widget>[
           const Padding(
             padding: EdgeInsets.all(10.0),
           ),
           SizedBox(
-            width: width*0.96,
+            width: width * 0.96,
             child: CupertinoSegmentedControl<int>(
               selectedColor: Color(0xff0056D2),
               children: {
@@ -207,4 +215,3 @@ Widget buildSegment(String text) => Container(
         style: TextStyle(fontSize: 20),
       ),
     );
-

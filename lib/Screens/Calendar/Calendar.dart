@@ -12,15 +12,23 @@ class Calendar extends StatefulWidget {
 class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var height = size.height;
+    var width = size.width;
+
     print("Calendar");
     return Scaffold(
         appBar: AppBar(
+          toolbarHeight: height * 0.12,
+          elevation: 0.0,
+          backgroundColor: Colors.white,
           title: Text(
             "Calendar",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+                fontSize: height * 0.045),
           ),
-          elevation: 6,
-          backgroundColor: Color(0xff0056D2),
         ),
         body: Container(
           margin: EdgeInsets.all(20),

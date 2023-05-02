@@ -19,7 +19,11 @@ class _HomePageState extends State<HomePage> {
     return FutureBuilder(
       future: getFlagValuesSF(),
       builder: (context, snapshot) {
-        if (snapshot.hasData && snapshot.data![0] == null) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasData && snapshot.data![0] == null) {
           return Log();
         } else if (snapshot.hasData) {
           if (snapshot.data![0]) {
