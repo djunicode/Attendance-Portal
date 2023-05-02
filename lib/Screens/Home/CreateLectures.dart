@@ -14,7 +14,7 @@ class _CreateLecturesState extends State<CreateLectures> {
   TimeOfDay _timeOfDayfrom = TimeOfDay(hour: 12, minute: 30);
   TimeOfDay _timeOfDayto = TimeOfDay(hour: 12, minute: 30);
 
-  void _showTimePickerfrom(){
+  void _showTimePickerfrom() {
     showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -22,9 +22,10 @@ class _CreateLecturesState extends State<CreateLectures> {
       setState(() {
         _timeOfDayfrom = value!;
       });
-    } );
+    });
   }
-  void _showTimePickerto(){
+
+  void _showTimePickerto() {
     showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -32,19 +33,15 @@ class _CreateLecturesState extends State<CreateLectures> {
       setState(() {
         _timeOfDayto = value!;
       });
-    } );
+    });
   }
+
   List<DayInWeek> _days = [
-    DayInWeek(
-        "S"
-    ),
+    DayInWeek("S"),
     DayInWeek(
       "M",
     ),
-    DayInWeek(
-        "T",
-        isSelected: true
-    ),
+    DayInWeek("T", isSelected: true),
     DayInWeek(
       "W",
     ),
@@ -76,25 +73,39 @@ class _CreateLecturesState extends State<CreateLectures> {
   String? value2;
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var height = size.height;
+    var width = size.width;
+
     DateTime now = DateTime.now().add(Duration(days: 1));
     String formattedDate = DateFormat.MMMEd().format(now);
     return SizedBox(
-      height: 456,
+      height: height*0.6,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(32,32,32,25.0),
+        padding: const EdgeInsets.fromLTRB(32, 32, 32, 25.0),
         child: Column(
           children: [
             Row(
               children: [
-                Text("Tomorrow - ",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
-                Text(formattedDate,style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
-                SizedBox(width: 135,),
+                Text(
+                  "Tomorrow - ",
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                ),
+                Text(
+                  formattedDate,
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                ),
+                SizedBox(
+                  width: width*0.14,
+                ),
                 Icon(Icons.calendar_month_sharp)
               ],
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             SelectWeekDays(
-              fontSize:14,
+              fontSize: 14,
               fontWeight: FontWeight.w500,
               days: _days,
               border: false,
@@ -107,15 +118,19 @@ class _CreateLecturesState extends State<CreateLectures> {
                   begin: Alignment.topLeft,
                   colors: [const Color(0xffffff), const Color(0xffffff)],
                   tileMode:
-                  TileMode.repeated, // repeats the gradient over the canvas
+                      TileMode.repeated, // repeats the gradient over the canvas
                 ),
               ),
-              onSelect: (values) { // <== Callback to handle the selected days
+              onSelect: (values) {
+                // <== Callback to handle the selected days
                 print(values);
               },
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Container(
+              height: height*0.06,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black, width: 1),
                 borderRadius: BorderRadius.circular(10),
@@ -137,59 +152,70 @@ class _CreateLecturesState extends State<CreateLectures> {
                 ),
               ),
             ),
-            SizedBox(height: 19,),
+            SizedBox(
+              height: 19,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 2.0),
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap:_showTimePickerfrom,
+                    onTap: _showTimePickerfrom,
                     child: Container(
-                      height: 60,
-                      width: 154,
+                      height: height*0.06,
+                      width: width*0.35,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             width: 1,
                             color: Colors.black,
-                          )
-                      ),
+                          )),
                       child: Center(
-                          child: Text(_timeOfDayfrom.format(context).toString(),style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),)),
-
+                          child: Text(
+                        _timeOfDayfrom.format(context).toString(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 16),
+                      )),
                     ),
                   ),
-                  SizedBox(width: 35,),
+                  SizedBox(
+                    width: 15,
+                  ),
                   GestureDetector(
                     onTap: _showTimePickerto,
                     child: Container(
-                      height: 60,
-                      width: 154,
+                      height: height*0.06,
+                      width: width*0.35,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             width: 1,
                             color: Colors.black,
-                          )
-                      ),
+                          )),
                       child: Center(
                           child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text("To "),
-                              ),
-                              Text(_timeOfDayto.format(context).toString(),style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
-                            ],
-                          )),
-
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: Text("To "),
+                          ),
+                          Text(
+                            _timeOfDayto.format(context).toString(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16),
+                          ),
+                        ],
+                      )),
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Container(
+              height: height*0.06,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black, width: 1),
                 borderRadius: BorderRadius.circular(10),
@@ -211,9 +237,9 @@ class _CreateLecturesState extends State<CreateLectures> {
                 ),
               ),
             ),
-
-            SizedBox(height: 20,),
-
+            SizedBox(
+              height: 20,
+            ),
             Container(
               height: 50,
               width: double.infinity,
@@ -239,15 +265,12 @@ class _CreateLecturesState extends State<CreateLectures> {
                 ),
               ),
             ),
-
-
           ],
         ),
       ),
-
     );
-
   }
+
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
       value: item,
       child: Text(

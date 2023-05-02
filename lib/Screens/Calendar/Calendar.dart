@@ -12,9 +12,13 @@ class Calendar extends StatefulWidget {
 class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
+    print("Calendar");
     return Scaffold(
         appBar: AppBar(
-          title: Text("Calendar",style: TextStyle(color: Colors.white),),
+          title: Text(
+            "Calendar",
+            style: TextStyle(color: Colors.white),
+          ),
           elevation: 6,
           backgroundColor: Color(0xff0056D2),
         ),
@@ -26,12 +30,14 @@ class _CalendarState extends State<Calendar> {
             dataSource: MeetingDataSource(_getDataSource()),
             selectionDecoration: BoxDecoration(
               color: Colors.transparent,
-              border: Border.all(color: Colors.redAccent,width: 2),
+              border: Border.all(color: Colors.redAccent, width: 2),
               borderRadius: BorderRadius.circular(4),
               shape: BoxShape.rectangle,
             ),
             monthViewSettings: const MonthViewSettings(
-              appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,showAgenda: true,),
+              appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
+              showAgenda: true,
+            ),
           ),
         ));
   }
@@ -39,17 +45,21 @@ class _CalendarState extends State<Calendar> {
   List<Meeting> _getDataSource() {
     final List<Meeting> meetings = <Meeting>[];
     final DateTime today = DateTime.now();
-    final DateTime startTime = DateTime(today.year, today.month, today.day,9);
+    final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
     final DateTime endTime = startTime.add(const Duration(hours: 2));
-    meetings.add(Meeting('Battle Of Brands', startTime, endTime, const Color(0xFF0F8644), false));
-    meetings.add(Meeting('Hackathon LOC', startTime.add(Duration(hours: 3)),endTime.add(Duration(hours: 72)), const Color(0xFFFF5252), false));
-    meetings.add(Meeting('Hackathon COC', startTime.add(Duration(hours: 4)),endTime.add(Duration(hours: 6)),const Color(0xFF0F8644), false));
-    meetings.add(Meeting('UNICODE', startTime.add(Duration(days: 6)),endTime.add(Duration(hours: 9)), const Color(0xFFFF5252), false));
-
+    meetings.add(Meeting('Battle Of Brands', startTime, endTime,
+        const Color(0xFF0F8644), false));
+    meetings.add(Meeting('Hackathon LOC', startTime.add(Duration(hours: 3)),
+        endTime.add(Duration(hours: 72)), const Color(0xFFFF5252), false));
+    meetings.add(Meeting('Hackathon COC', startTime.add(Duration(hours: 4)),
+        endTime.add(Duration(hours: 6)), const Color(0xFF0F8644), false));
+    meetings.add(Meeting('UNICODE', startTime.add(Duration(days: 6)),
+        endTime.add(Duration(hours: 9)), const Color(0xFFFF5252), false));
 
     return meetings;
   }
 }
+
 class MeetingDataSource extends CalendarDataSource {
   /// Creates a meeting data source, which used to set the appointment
   /// collection to the calendar
@@ -92,14 +102,10 @@ class MeetingDataSource extends CalendarDataSource {
     return meetingData;
   }
 }
+
 class Meeting {
   /// Creates a meeting class with required details.
-  Meeting(
-      this.eventName,
-      this.from,
-      this.to,
-      this.background,
-      this.isAllDay);
+  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
 
   /// Event name which is equivalent to subject property of [Appointment].
   String eventName;
@@ -116,4 +122,3 @@ class Meeting {
   /// IsAllDay which is equivalent to isAllDay property of [Appointment].
   bool isAllDay;
 }
-
