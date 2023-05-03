@@ -40,24 +40,17 @@ class _HomeState extends State<Home> {
             ? ListView.builder(
                 itemCount: snapshot.data?.Lectures.length,
                 itemBuilder: (context, index) {
+                  print(snapshot.data?.Lectures.length);
                   return Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(31.0, 19, 200, 0.0),
-                        child: index <= 4
-                            ? Text(
-                                snapshot.data!.Lectures[index].date,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 16),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Next Week",
-                                  style: TextStyle(color: Colors.blue),
-                                ),
-                              ),
-                      ),
+                          padding:
+                              const EdgeInsets.fromLTRB(31.0, 19, 200, 0.0),
+                          child: Text(
+                            snapshot.data!.Lectures[index].date,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 16),
+                          )),
                       PostCard(
                         refreshToken: widget.refreshToken,
                         accessToken: widget.accessToken,
@@ -83,13 +76,14 @@ class _HomeState extends State<Home> {
             ? ListView.builder(
                 itemCount: snapshot.data?.Lectures.length,
                 itemBuilder: (context, index) {
+                  print(snapshot.data?.Lectures.length);
                   return snapshot.hasData
                       ? Column(
                           children: [
                             Padding(
                               padding:
                                   const EdgeInsets.fromLTRB(0.0, 19, 239, 0.0),
-                              child: Text("Yesterday",
+                              child: Text(snapshot.data!.Lectures[index].date,
                                   style: TextStyle(
                                       fontWeight: FontWeight.w200,
                                       fontSize: 16)),
@@ -172,7 +166,8 @@ class _HomeState extends State<Home> {
                                           Navigator.of(context).pop();
                                           showModalBottomSheet(
                                             context: context,
-                                            builder: (_) => CreateLectures(),
+                                            builder: (context) =>
+                                                CreateLectures(),
                                           );
                                         },
                                         child: Text(
@@ -272,7 +267,6 @@ Widget buildSegment(String text) => Container(
     );
 
 Future<LectureAPI> GetLectureDetails(String? accessToken) async {
-  List<dynamic>? list;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? accessToken = prefs.getString('accessToken');
   print(accessToken);

@@ -26,8 +26,19 @@ class _BottomNavState extends State<BottomNav> {
   var tokens = [];
   var t;
 
-  void initializeTimer() {
-    const time = Duration(minutes: 20);
+  void initializeTimer() async {
+    var prefs = await SharedPreferences.getInstance();
+    t = await refreshLogin(tokens[0]);
+    tokens[1] = t[0];
+    print(tokens);
+    if (tokens[1] == null) {
+      Utils.showSnackBar(tokens[1]);
+    } else {
+      prefs.setString('accessToken', tokens[1]);
+      Utils.showSnackBar1("Token refreshed!");
+    }
+
+    const time = Duration(minutes: 60);
     _rootTimer = Timer.periodic(time, (timer) async {
       var prefs = await SharedPreferences.getInstance();
       t = await refreshLogin(tokens[0]);
@@ -63,7 +74,10 @@ class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     List<Widget> _widgetOptions = <Widget>[
-      Home(accessToken: widget.accessToken, refreshToken: widget.refreshToken,),
+      Home(
+        accessToken: widget.accessToken,
+        refreshToken: widget.refreshToken,
+      ),
       Calendar(),
       ProfilePage(
         accessToken: widget.accessToken,
