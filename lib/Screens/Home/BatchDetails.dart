@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:attendance_portal/Screens/Home/Attendance.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -396,7 +397,14 @@ class _BatchDetailsState extends State<BatchDetails> {
                   color: Color(0xff0056D2),
                 ),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                             Attendance()),
+                    );
+                  },
                   borderRadius: BorderRadius.circular(10),
                   child: const Center(
                     child: Text(
