@@ -4,9 +4,14 @@ import 'package:attendance_portal/Screens/Home/postCard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
-  Home({Key? key}) : super(key: key);
+  String? refreshToken;
+  String? accessToken;
+
+  Home({Key? key, required this.accessToken, required this.refreshToken})
+      : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -14,49 +19,15 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int groupValue = 0;
+  late String refresh;
+  late String access;
+  String t = "hi";
 
-  final Map<int, Widget> lists = <int, Widget>{
-    0: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(31.0, 19, 200, 0.0),
-                child: index <= 4
-                    ? Text(
-                        "Mar 4 Tomorrow ",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 16),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Next Week",
-                          style: TextStyle(color: Colors.blue),
-                        ),
-                      ),
-              ),
-              PostCard(),
-            ],
-          );
-        }),
-    1: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0.0, 19, 239, 0.0),
-                child: Text("Yesterday",
-                    style:
-                        TextStyle(fontWeight: FontWeight.w200, fontSize: 16)),
-              ),
-              PostCard(),
-            ],
-          );
-        }),
-  };
+  @override
+  void initState() {
+    refresh = widget.refreshToken!;
+    access = widget.accessToken!;
+  }
 
   int sharedValue = 0;
 
@@ -68,6 +39,55 @@ class _HomeState extends State<Home> {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
+
+    final Map<int, Widget> lists = <int, Widget>{
+      0: ListView.builder(
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(31.0, 19, 200, 0.0),
+                  child: index <= 4
+                      ? Text(
+                          "Mar 4 Tomorrow ",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 16),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Next Week",
+                            style: TextStyle(color: Colors.blue),
+                          ),
+                        ),
+                ),
+                PostCard(
+                  refreshToken: widget.refreshToken,
+                  accessToken: widget.accessToken,
+                ),
+              ],
+            );
+          }),
+      1: ListView.builder(
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0.0, 19, 239, 0.0),
+                  child: Text("Yesterday",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w200, fontSize: 16)),
+                ),
+                PostCard(
+                  refreshToken: widget.refreshToken,
+                  accessToken: widget.accessToken,
+                ),
+              ],
+            );
+          }),
+    };
 
     return Scaffold(
       appBar: AppBar(
