@@ -76,25 +76,26 @@ class _AttendanceState extends State<Attendance> {
               ),
               trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      present = !present;
-                      absent = false;
-                    });
-                  },
-                  child: present
-                      ? SvgPicture.asset(
-                          'assets/images/whiteTick.svg',
-                        )
-                      : SvgPicture.asset(
-                          'assets/images/Blueclear.svg',
-                        ),
-                  style: ElevatedButton.styleFrom(
-                      shape: CircleBorder(),
-                      backgroundColor:
-                          present ? Color(0xff0056D2) : Colors.white,
-                      side: BorderSide(color: Color(0xff0056D2), width: 2)),
-                ),
+
+                    onPressed: () {
+                      setState(() {
+                        present = !present;
+                        absent = false;
+                      });
+                    },
+                    child: present
+                        ? SvgPicture.asset(
+                            'assets/images/whiteTick.svg',
+                          )
+                        : SvgPicture.asset(
+                            'assets/images/Blueclear.svg',
+                          ),
+                    style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        backgroundColor:
+                            present ? Color(0xff0056D2) : Colors.white,
+                        side: BorderSide(color: Color(0xff0056D2), width: 2))),
+
                 ElevatedButton(
                     onPressed: () {
                       setState(() {

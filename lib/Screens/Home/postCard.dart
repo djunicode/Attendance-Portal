@@ -4,7 +4,22 @@ import 'package:flutter_svg/svg.dart';
 import 'BatchDetails.dart';
 
 class PostCard extends StatefulWidget {
-  const PostCard({Key? key}) : super(key: key);
+  String? refreshToken;
+  String? accessToken;
+  String? batch;
+  String? startTime;
+  String? endTime;
+  String? subject;
+
+  PostCard(
+      {Key? key,
+      required this.refreshToken,
+      required this.accessToken,
+      required this.batch,
+      required this.endTime,
+      required this.startTime,
+      required this.subject})
+      : super(key: key);
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -18,8 +33,8 @@ class _PostCardState extends State<PostCard> {
     var width = size.width;
 
     return SizedBox(
-      height: height * 0.13,
-      width: width * 0.84,
+      height: height * 0.2,
+      width: width * 0.88,
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
@@ -35,19 +50,10 @@ class _PostCardState extends State<PostCard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-// <<<<<<< HEAD
-//                 Padding(
-//                   padding:  EdgeInsets.fromLTRB(
-//                     40.0,
-//                     0.0,
-//                     width*0.2,
-//                     0,
-//                   ),
-// =======
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: Text(
-                    "SE Computer Engineering-A3",
+                    "Batch: " + widget.batch!,
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
@@ -57,7 +63,7 @@ class _PostCardState extends State<PostCard> {
                 Row(
                   children: [
                     Text(
-                      "12:30 PM-1:30 PM",
+                      widget.startTime! + " - " + widget.endTime!,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
@@ -65,7 +71,7 @@ class _PostCardState extends State<PostCard> {
                       ),
                     ),
                     SizedBox(
-                      width: 104,
+                      width: 40,
                     ),
                     SizedBox(
                       width: 35,
@@ -82,7 +88,7 @@ class _PostCardState extends State<PostCard> {
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: Text(
-                    "Computer Networks",
+                    widget.subject!,
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 13,

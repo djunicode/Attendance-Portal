@@ -14,12 +14,14 @@ class CreateLectures extends StatefulWidget {
 }
 
 class _CreateLecturesState extends State<CreateLectures> {
+  TextEditingController roomController = new TextEditingController();
   TimeOfDay _timeOfDayfrom = TimeOfDay(hour: 12, minute: 30);
   TimeOfDay _timeOfDayto = TimeOfDay(hour: 12, minute: 30);
   String? _subject;
   String? _startTime;
   String? _endTime;
   String? _batch;
+  String? roomNumber;
 
   void _showTimePickerfrom() {
     showTimePicker(
@@ -27,8 +29,15 @@ class _CreateLecturesState extends State<CreateLectures> {
       initialTime: TimeOfDay.now(),
     ).then((value) {
       setState(() {
+        TimeOfDay? selectedTime = value;
+        var replacingTime = selectedTime!
+            .replacing(hour: selectedTime!.hour, minute: selectedTime!.minute);
+
+        String formattedTime = replacingTime.hour.toString() +
+            ":" +
+            replacingTime.minute.toString();
         _timeOfDayfrom = value!;
-        _startTime = value!.toString();
+        _startTime = formattedTime;
       });
     });
   }
@@ -39,8 +48,15 @@ class _CreateLecturesState extends State<CreateLectures> {
       initialTime: TimeOfDay.now(),
     ).then((value) {
       setState(() {
+        TimeOfDay? selectedTime = value;
+        var replacingTime = selectedTime!
+            .replacing(hour: selectedTime!.hour, minute: selectedTime!.minute);
+
+        String formattedTime = replacingTime.hour.toString() +
+            ":" +
+            replacingTime.minute.toString();
         _timeOfDayto = value!;
-        _endTime = value!.toString();
+        _endTime = formattedTime;
       });
     });
   }
@@ -90,7 +106,11 @@ class _CreateLecturesState extends State<CreateLectures> {
     var width = size.width;
 
     DateTime now = DateTime.now().add(Duration(days: 1));
-    String formattedDate = DateFormat.MMMEd().format(now);
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formattedDate = formatter.format(DateTime.now());
+    print(formattedDate);
+    //DateFormat.yMd().format(now);
+    //DateFormat.MMMEd().format(now);
     return SizedBox(
       height: height * 0.6,
       child: Padding(
@@ -100,7 +120,7 @@ class _CreateLecturesState extends State<CreateLectures> {
             Row(
               children: [
                 Text(
-                  "Tomorrow - ",
+                  "Tomorrow: ",
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                 ),
                 Text(
@@ -137,6 +157,39 @@ class _CreateLecturesState extends State<CreateLectures> {
                 // <== Callback to handle the selected days
                 print(values);
               },
+            ),
+            Container(
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(13),
+                    fillColor: Colors.white,
+                    filled: true,
+                    hintText: "Enter room number",
+                    hintStyle: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey,
+                    ),
+                    errorStyle: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.w500),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(7.0),
+                      borderSide: BorderSide(color: Color(0xff848792)),
+                    )),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Room number not entered';
+                  } else if (value.length > 11) {
+                    return "Enter valid room number";
+                  }
+                  return null;
+                },
+                controller: roomController,
+                onSaved: (value) {
+                  roomNumber = roomController.text;
+                },
+              ),
             ),
             SizedBox(
               height: 15,
@@ -264,11 +317,12 @@ class _CreateLecturesState extends State<CreateLectures> {
               ),
               child: InkWell(
                 onTap: () async {
+                  print(formattedDate);
                   await createLecture(
-                    '61',
-                    '12:00',
-                    '1:00',
-                    '2023-05-21',
+                    roomNumber,
+                    _startTime,
+                    _endTime,
+                    formattedDate,
                     'note',
                     true,
                     1,
