@@ -11,7 +11,6 @@ class Attendance extends StatefulWidget {
 }
 
 class _AttendanceState extends State<Attendance> {
-
   bool absent = false;
   bool present = false;
 
@@ -78,36 +77,41 @@ class _AttendanceState extends State<Attendance> {
               trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 ElevatedButton(
                   onPressed: () {
-                   setState(() {
-                     present = !present;
-                   });
+                    setState(() {
+                      present = !present;
+                    });
                   },
-                  child: present ? SvgPicture.asset('assets/images/whiteTick.svg',): SvgPicture.asset('assets/images/Blueclear.svg',) ,
+                  child: present
+                      ? SvgPicture.asset(
+                          'assets/images/whiteTick.svg',
+                        )
+                      : SvgPicture.asset(
+                          'assets/images/Blueclear.svg',
+                        ),
                   style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
-                      backgroundColor: present?  Color(0xff0056D2):Colors.white,
+                      backgroundColor:
+                          present ? Color(0xff0056D2) : Colors.white,
                       side: BorderSide(color: Color(0xff0056D2), width: 2)),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      absent = !absent;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                      shape: CircleBorder(),
-                      backgroundColor: absent ?     Color(0xffD20000):Colors.white,
-                      side: BorderSide(color: Color(0xffD20000), width: 2)),
-                  child: absent
-                      ?SvgPicture.asset(
-                    'assets/images/whiteCross.svg',
-                  ):
-                  SvgPicture.asset(
-                    'assets/images/RedClear.svg',
-                  )
-
-
-                ),
+                    onPressed: () {
+                      setState(() {
+                        absent = !absent;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        backgroundColor:
+                            absent ? Color(0xffD20000) : Colors.white,
+                        side: BorderSide(color: Color(0xffD20000), width: 2)),
+                    child: absent
+                        ? SvgPicture.asset(
+                            'assets/images/whiteCross.svg',
+                          )
+                        : SvgPicture.asset(
+                            'assets/images/RedClear.svg',
+                          )),
               ]),
             ),
           );
