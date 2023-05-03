@@ -11,13 +11,11 @@ class Attendance extends StatefulWidget {
 }
 
 class _AttendanceState extends State<Attendance> {
-
   bool absent = false;
   bool present = false;
 
   @override
   Widget build(BuildContext context) {
-
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
@@ -78,19 +76,29 @@ class _AttendanceState extends State<Attendance> {
               ),
               trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 ElevatedButton(
-                  onPressed: () {},
-                  child: SvgPicture.asset(
-                    'assets/images/Blueclear.svg',
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      shape: CircleBorder(),
-                      backgroundColor: Colors.white,
-                      side: BorderSide(color: Color(0xff0056D2), width: 2)),
-                ),
+                    onPressed: () {
+                      setState(() {
+                        present = !present;
+                        absent = false;
+                      });
+                    },
+                    child: present
+                        ? SvgPicture.asset(
+                            'assets/images/whiteTick.svg',
+                          )
+                        : SvgPicture.asset(
+                            'assets/images/Blueclear.svg',
+                          ),
+                    style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        backgroundColor:
+                            present ? Color(0xff0056D2) : Colors.white,
+                        side: BorderSide(color: Color(0xff0056D2), width: 2))),
                 ElevatedButton(
                     onPressed: () {
                       setState(() {
                         absent = !absent;
+                        present = false;
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -98,10 +106,12 @@ class _AttendanceState extends State<Attendance> {
                         backgroundColor:
                             absent ? Color(0xffD20000) : Colors.white,
                         side: BorderSide(color: Color(0xffD20000), width: 2)),
-                    child: !absent
-                        ? SvgPicture.asset("assets/images/RedClear.svg")
-                        : SvgPicture.asset(
+                    child: absent
+                        ? SvgPicture.asset(
                             'assets/images/whiteCross.svg',
+                          )
+                        : SvgPicture.asset(
+                            'assets/images/RedClear.svg',
                           )),
               ]),
             ),
