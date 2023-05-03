@@ -79,6 +79,7 @@ class _AttendanceState extends State<Attendance> {
                   onPressed: () {
                     setState(() {
                       present = !present;
+                      absent = false;
                     });
                   },
                   child: present
@@ -98,6 +99,7 @@ class _AttendanceState extends State<Attendance> {
                     onPressed: () {
                       setState(() {
                         absent = !absent;
+                        present = false;
                       });
                     },
                     style: ElevatedButton.styleFrom(
