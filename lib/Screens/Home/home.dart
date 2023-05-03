@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:attendance_portal/Screens/Home/BatchDetails.dart';
 import 'package:attendance_portal/Screens/Home/CreateLectures.dart';
 import 'package:attendance_portal/Screens/Home/postCard.dart';
@@ -5,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import '../../Models/getLectureDetails.dart';
 
 class Home extends StatefulWidget {
   String? refreshToken;
@@ -19,16 +22,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int groupValue = 0;
-  late String refresh;
-  late String access;
-  String t = "hi";
-
-  @override
-  void initState() {
-    refresh = widget.refreshToken!;
-    access = widget.accessToken!;
-  }
-
   int sharedValue = 0;
 
   @override
@@ -41,52 +34,94 @@ class _HomeState extends State<Home> {
     var width = size.width;
 
     final Map<int, Widget> lists = <int, Widget>{
-      0: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(31.0, 19, 200, 0.0),
-                  child: index <= 4
-                      ? Text(
-                          "Mar 4 Tomorrow ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 16),
+      0: FutureBuilder<LectureAPI>(
+        future: GetLectureDetails(widget.accessToken),
+        builder: (context, snapshot) => snapshot.hasData
+            ? ListView.builder(
+                itemCount: snapshot.data?.Lectures.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(31.0, 19, 200, 0.0),
+                        child: index <= 4
+                            ? Text(
+                                snapshot.data!.Lectures[index].date,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 16),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Next Week",
+                                  style: TextStyle(color: Colors.blue),
+                                ),
+                              ),
+                      ),
+                      PostCard(
+                        refreshToken: widget.refreshToken,
+                        accessToken: widget.accessToken,
+                        batch: snapshot.data!.Lectures[index].batch.name,
+                        endTime: snapshot.data!.Lectures[index].endTime,
+                        startTime: snapshot.data!.Lectures[index].startTime,
+                        subject: snapshot.data!.Lectures[index].subject.name,
+                      ),
+                    ],
+                  );
+                })
+            : !snapshot.hasError
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Center(
+                    child: Text("Error occured!"),
+                  ),
+      ),
+      1: FutureBuilder<LectureAPI>(
+        future: GetLectureDetails(widget.accessToken),
+        builder: (context, snapshot) => snapshot.hasData
+            ? ListView.builder(
+                itemCount: snapshot.data?.Lectures.length,
+                itemBuilder: (context, index) {
+                  return snapshot.hasData
+                      ? Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(0.0, 19, 239, 0.0),
+                              child: Text("Yesterday",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w200,
+                                      fontSize: 16)),
+                            ),
+                            PostCard(
+                              refreshToken: widget.refreshToken,
+                              accessToken: widget.accessToken,
+                              batch: snapshot.data!.Lectures[index].batch.name,
+                              endTime: snapshot.data!.Lectures[index].endTime,
+                              startTime:
+                                  snapshot.data!.Lectures[index].startTime,
+                              subject:
+                                  snapshot.data!.Lectures[index].subject.name,
+                            ),
+                          ],
                         )
-                      : Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Next Week",
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                        ),
-                ),
-                PostCard(
-                  refreshToken: widget.refreshToken,
-                  accessToken: widget.accessToken,
-                ),
-              ],
-            );
-          }),
-      1: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 19, 239, 0.0),
-                  child: Text("Yesterday",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w200, fontSize: 16)),
-                ),
-                PostCard(
-                  refreshToken: widget.refreshToken,
-                  accessToken: widget.accessToken,
-                ),
-              ],
-            );
-          }),
+                      : !snapshot.hasError
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : Center(
+                              child: Text("Error occured!"),
+                            );
+                })
+            : !snapshot.hasError
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Center(
+                    child: Text("Error occured!"),
+                  ),
+      )
     };
 
     return Scaffold(
@@ -235,3 +270,24 @@ Widget buildSegment(String text) => Container(
         style: TextStyle(fontSize: 20),
       ),
     );
+
+Future<LectureAPI> GetLectureDetails(String? accessToken) async {
+  List<dynamic>? list;
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? accessToken = prefs.getString('accessToken');
+  print(accessToken);
+  var res = await http.get(
+    Uri.parse(
+        'http://attendanceportal.pythonanywhere.com/attendance/assigned-teacher-lecture'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $accessToken'
+    },
+  );
+  print(res.body);
+  print(res.statusCode);
+  Map<String, dynamic> data = jsonDecode(res.body);
+  print(data);
+  LectureAPI x = LectureAPI.fromJson(data);
+  return x;
+}
