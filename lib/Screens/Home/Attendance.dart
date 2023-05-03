@@ -76,6 +76,7 @@ class _AttendanceState extends State<Attendance> {
               ),
               trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 ElevatedButton(
+
                     onPressed: () {
                       setState(() {
                         present = !present;
@@ -94,6 +95,7 @@ class _AttendanceState extends State<Attendance> {
                         backgroundColor:
                             present ? Color(0xff0056D2) : Colors.white,
                         side: BorderSide(color: Color(0xff0056D2), width: 2))),
+
                 ElevatedButton(
                     onPressed: () {
                       setState(() {

@@ -14,12 +14,14 @@ class CreateLectures extends StatefulWidget {
 }
 
 class _CreateLecturesState extends State<CreateLectures> {
+  TextEditingController roomController = new TextEditingController();
   TimeOfDay _timeOfDayfrom = TimeOfDay(hour: 12, minute: 30);
   TimeOfDay _timeOfDayto = TimeOfDay(hour: 12, minute: 30);
   String? _subject;
   String? _startTime;
   String? _endTime;
   String? _batch;
+  String? roomNumber;
 
   void _showTimePickerfrom() {
     showTimePicker(
@@ -27,8 +29,15 @@ class _CreateLecturesState extends State<CreateLectures> {
       initialTime: TimeOfDay.now(),
     ).then((value) {
       setState(() {
+        TimeOfDay? selectedTime = value;
+        var replacingTime = selectedTime!
+            .replacing(hour: selectedTime!.hour, minute: selectedTime!.minute);
+
+        String formattedTime = replacingTime.hour.toString() +
+            ":" +
+            replacingTime.minute.toString();
         _timeOfDayfrom = value!;
-        _startTime = value!.toString();
+        _startTime = formattedTime;
       });
     });
   }
@@ -39,8 +48,15 @@ class _CreateLecturesState extends State<CreateLectures> {
       initialTime: TimeOfDay.now(),
     ).then((value) {
       setState(() {
+        TimeOfDay? selectedTime = value;
+        var replacingTime = selectedTime!
+            .replacing(hour: selectedTime!.hour, minute: selectedTime!.minute);
+
+        String formattedTime = replacingTime.hour.toString() +
+            ":" +
+            replacingTime.minute.toString();
         _timeOfDayto = value!;
-        _endTime = value!.toString();
+        _endTime = formattedTime;
       });
     });
   }
@@ -85,218 +101,250 @@ class _CreateLecturesState extends State<CreateLectures> {
 
   @override
   Widget build(BuildContext context) {
-
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
-    DateTime now = DateTime.now().add(Duration(days: 1));
-    String formattedDate = DateFormat.MMMEd().format(now);
 
-    return GestureDetector(
-      onTap: (){
-        Navigator.of(context).pop();
-      },
-      child: SizedBox(
-        height: height * 0.6,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(32, 32, 32, 25.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Text(
-                    "Tomorrow - ",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                  ),
-                  Text(
-                    formattedDate,
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                  ),
-                  SizedBox(
-                    width: width * 0.14,
-                  ),
-                  Icon(Icons.calendar_month_sharp)
-                ],
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              SelectWeekDays(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                days: _days,
-                border: false,
-                daysFillColor: Color(0xff0056D2),
-                unSelectedDayTextColor: Colors.grey,
-                selectedDayTextColor: Colors.white,
-                boxDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    colors: [const Color(0xffffff), const Color(0xffffff)],
-                    tileMode:
-                        TileMode.repeated, // repeats the gradient over the canvas
-                  ),
+    DateTime now = DateTime.now().add(Duration(days: 1));
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formattedDate = formatter.format(DateTime.now());
+    print(formattedDate);
+    //DateFormat.yMd().format(now);
+    //DateFormat.MMMEd().format(now);
+    return SizedBox(
+      height: height * 0.6,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(32, 32, 32, 25.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Text(
+                  "Tomorrow: ",
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                 ),
-                onSelect: (values) {
-                  // <== Callback to handle the selected days
-                  print(values);
+                Text(
+                  formattedDate,
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                ),
+                SizedBox(
+                  width: width * 0.14,
+                ),
+                Icon(Icons.calendar_month_sharp)
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            SelectWeekDays(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              days: _days,
+              border: false,
+              daysFillColor: Color(0xff0056D2),
+              unSelectedDayTextColor: Colors.grey,
+              selectedDayTextColor: Colors.white,
+              boxDecoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  colors: [const Color(0xffffff), const Color(0xffffff)],
+                  tileMode:
+                      TileMode.repeated, // repeats the gradient over the canvas
+                ),
+              ),
+              onSelect: (values) {
+                // <== Callback to handle the selected days
+                print(values);
+              },
+            ),
+            Container(
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(13),
+                    fillColor: Colors.white,
+                    filled: true,
+                    hintText: "Enter room number",
+                    hintStyle: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey,
+                    ),
+                    errorStyle: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.w500),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(7.0),
+                      borderSide: BorderSide(color: Color(0xff848792)),
+                    )),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Room number not entered';
+                  } else if (value.length > 11) {
+                    return "Enter valid room number";
+                  }
+                  return null;
+                },
+                controller: roomController,
+                onSaved: (value) {
+                  roomNumber = roomController.text;
                 },
               ),
-              SizedBox(
-                height: 15,
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              height: height * 0.06,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 1),
+                borderRadius: BorderRadius.circular(10),
               ),
-              Container(
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    hint: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: const Text("Select Batch"),
-                    ),
-                    value: value2,
-                    isExpanded: true,
-                    items: list2.map(buildMenuItem).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        value2 = value;
-                        _batch = value!;
-                      });
-                    },
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  hint: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: const Text("Select Batch"),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 19,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: _showTimePickerfrom,
-                      child: Container(
-                        height: height * 0.06,
-                        width: width * 0.35,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              width: 1,
-                              color: Colors.black,
-                            )),
-                        child: Center(
-                            child: Text(
-                          _timeOfDayfrom.format(context).toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16),
-                        )),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    GestureDetector(
-                      onTap: _showTimePickerto,
-                      child: Container(
-                        height: height * 0.06,
-                        width: width * 0.35,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              width: 1,
-                              color: Colors.black,
-                            )),
-                        child: Center(
-                            child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20.0),
-                              child: Text("To "),
-                            ),
-                            Text(
-                              _timeOfDayto.format(context).toString(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500, fontSize: 16),
-                            ),
-                          ],
-                        )),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                height: height * 0.06,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    hint: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: const Text("Select Subject "),
-                    ),
-                    value: value1,
-                    isExpanded: true,
-                    items: list1.map(buildMenuItem).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        value1 = value;
-                        _subject = value!;
-                      });
-                    },
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                height: 50,
-                width: double.infinity,
-                // margin: EdgeInsets.symmetric(horizontal: 30),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff0056D2),
-                ),
-                child: InkWell(
-                  onTap: () async {
-                    await createLecture(
-                      '61',
-                      '12:00',
-                      '1:00',
-                      '2023-05-21',
-                      'note',
-                      true,
-                      1,
-                      9,
-                      2,
-                    );
-                    Navigator.pop(context);
+                  value: value2,
+                  isExpanded: true,
+                  items: list2.map(buildMenuItem).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      value2 = value;
+                      _batch = value!;
+                    });
                   },
-                  borderRadius: BorderRadius.circular(10),
-                  child: const Center(
-                    child: Text(
-                      "Create Lecture",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 19,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2.0),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: _showTimePickerfrom,
+                    child: Container(
+                      height: height * 0.06,
+                      width: width * 0.35,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.black,
+                          )),
+                      child: Center(
+                          child: Text(
+                        _timeOfDayfrom.format(context).toString(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 16),
+                      )),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  GestureDetector(
+                    onTap: _showTimePickerto,
+                    child: Container(
+                      height: height * 0.06,
+                      width: width * 0.35,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.black,
+                          )),
+                      child: Center(
+                          child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: Text("To "),
+                          ),
+                          Text(
+                            _timeOfDayto.format(context).toString(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16),
+                          ),
+                        ],
+                      )),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              height: height * 0.06,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  hint: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: const Text("Select Subject "),
+                  ),
+                  value: value1,
+                  isExpanded: true,
+                  items: list1.map(buildMenuItem).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      value1 = value;
+                      _subject = value!;
+                    });
+                  },
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              height: 50,
+              width: double.infinity,
+              // margin: EdgeInsets.symmetric(horizontal: 30),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Color(0xff0056D2),
+              ),
+              child: InkWell(
+                onTap: () async {
+                  print(formattedDate);
+                  await createLecture(
+                    roomNumber,
+                    _startTime,
+                    _endTime,
+                    formattedDate,
+                    'note',
+                    true,
+                    1,
+                    9,
+                    2,
+                  );
+                  Navigator.pop(context);
+                },
+                borderRadius: BorderRadius.circular(10),
+                child: const Center(
+                  child: Text(
+                    "Create Lecture",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
