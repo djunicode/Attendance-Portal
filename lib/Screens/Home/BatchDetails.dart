@@ -215,7 +215,7 @@ class _BatchDetailsState extends State<BatchDetails> {
                     onTap: () async {
                       showDialog<void>(
                         context: context,
-                        barrierDismissible: false,
+                        barrierDismissible: true,
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: IntrinsicWidth(
@@ -300,7 +300,7 @@ class _BatchDetailsState extends State<BatchDetails> {
                     onTap: () async {
                       showDialog<void>(
                         context: context,
-                        barrierDismissible: false,
+                        barrierDismissible: true,
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: IntrinsicWidth(

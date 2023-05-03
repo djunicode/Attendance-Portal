@@ -11,13 +11,17 @@ class Attendance extends StatefulWidget {
 }
 
 class _AttendanceState extends State<Attendance> {
+
+  bool absent = false;
+  bool present = false;
+
   @override
   Widget build(BuildContext context) {
+
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
-    bool absent = false;
-    bool present = false;
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: height * 0.12,
@@ -55,7 +59,7 @@ class _AttendanceState extends State<Attendance> {
       ),
       body: ListView.separated(
         itemCount: 50,
-        itemBuilder: (_, index) {
+        itemBuilder: (BuildContext context, index) {
           return Padding(
             padding: const EdgeInsets.only(left: 18.0),
             child: ListTile(
@@ -84,25 +88,21 @@ class _AttendanceState extends State<Attendance> {
                       side: BorderSide(color: Color(0xff0056D2), width: 2)),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      absent = true;
-                      print("Hi");
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                      shape: CircleBorder(),
-                      backgroundColor:
-                          absent ? Color(0xffD20000) : Colors.white,
-                      side: BorderSide(color: Color(0xffD20000), width: 2)),
-                  child: absent
-                      ? SvgPicture.asset(
-                          'assets/images/whiteCross.svg',
-                        )
-                      : SvgPicture.asset(
-                          'assets/images/RedClear.svg',
-                        ),
-                ),
+                    onPressed: () {
+                      setState(() {
+                        absent = !absent;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        backgroundColor:
+                            absent ? Color(0xffD20000) : Colors.white,
+                        side: BorderSide(color: Color(0xffD20000), width: 2)),
+                    child: !absent
+                        ? SvgPicture.asset("assets/images/RedClear.svg")
+                        : SvgPicture.asset(
+                            'assets/images/whiteCross.svg',
+                          )),
               ]),
             ),
           );
