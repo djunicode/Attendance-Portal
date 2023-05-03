@@ -54,61 +54,61 @@ class _AttendanceState extends State<Attendance> {
           ],
         ),
       ),
-      body: ListView.separated(itemCount:50,itemBuilder: (_,index){
-        return Padding(
-          padding: const EdgeInsets.only(left: 18.0),
-          child: ListTile(
-            title: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Text("60004210093",style: GoogleFonts.montserrat(fontWeight: FontWeight.w600,fontSize: 16),),
-            ),
-            subtitle: Text("Arya Shirgaonkar",style: GoogleFonts.montserrat(fontWeight: FontWeight.w400,fontSize: 13),),
-            trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ElevatedButton(
-                    onPressed: (){},
-                    child: SvgPicture.asset('assets/images/Blueclear.svg',),
-                    style: ElevatedButton.styleFrom(
+      body: ListView.separated(
+        itemCount: 50,
+        itemBuilder: (_, index) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 18.0),
+            child: ListTile(
+              title: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  "60004210093",
+                  style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w600, fontSize: 16),
+                ),
+              ),
+              subtitle: Text(
+                "Arya Shirgaonkar",
+                style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.w400, fontSize: 13),
+              ),
+              trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                ElevatedButton(
+                  onPressed: () {},
+                  child: SvgPicture.asset(
+                    'assets/images/Blueclear.svg',
+                  ),
+                  style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
                       backgroundColor: Colors.white,
-                      side: BorderSide(
-                        color: Color(0xff0056D2),
-                        width: 2
-                      )
-                    ),
+                      side: BorderSide(color: Color(0xff0056D2), width: 2)),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      absent = !absent;
+                    });
+                  },
+                  child: SvgPicture.asset(
+                    'assets/images/RedClear.svg',
                   ),
-
-                  ElevatedButton(
-                      onPressed: (){
-                        setState(() {
-                          absent = !absent;
-                        });
-                      },
-                      child: SvgPicture.asset('assets/images/RedClear.svg',),
-                      style: ElevatedButton.styleFrom(
+                  style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
-                        backgroundColor: Colors.white,
-                          side: BorderSide(
-                              color: Color(0xffD20000),
-                              width: 2
-                          )
-
-                    ),
-                  ),
-
-                ]),
-          ),
-        );
-      },
-        separatorBuilder: (context, index)
-        {
+                      backgroundColor: Colors.white,
+                      side: BorderSide(color: Color(0xffD20000), width: 2)),
+                ),
+              ]),
+            ),
+          );
+        },
+        separatorBuilder: (context, index) {
           return Divider(
             thickness: 2,
           );
         },
       ),
-
     );
   }
 }
+
