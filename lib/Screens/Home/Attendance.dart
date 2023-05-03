@@ -11,13 +11,16 @@ class Attendance extends StatefulWidget {
 }
 
 class _AttendanceState extends State<Attendance> {
+
+  bool absent = false;
+  bool present = false;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
-    bool absent = false;
-    bool present = false;
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: height * 0.12,
@@ -55,7 +58,7 @@ class _AttendanceState extends State<Attendance> {
       ),
       body: ListView.separated(
         itemCount: 50,
-        itemBuilder: (_, index) {
+        itemBuilder: (BuildContext context, index) {
           return Padding(
             padding: const EdgeInsets.only(left: 18.0),
             child: ListTile(
@@ -74,34 +77,36 @@ class _AttendanceState extends State<Attendance> {
               ),
               trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 ElevatedButton(
-                  onPressed: () {},
-                  child: SvgPicture.asset(
-                    'assets/images/Blueclear.svg',
-                  ),
+                  onPressed: () {
+                   setState(() {
+                     present = !present;
+                   });
+                  },
+                  child: present ? SvgPicture.asset('assets/images/whiteTick.svg',): SvgPicture.asset('assets/images/Blueclear.svg',) ,
                   style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
-                      backgroundColor: Colors.white,
+                      backgroundColor: present?  Color(0xff0056D2):Colors.white,
                       side: BorderSide(color: Color(0xff0056D2), width: 2)),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      absent = true;
-                      print("Hi");
+                      absent = !absent;
                     });
                   },
                   style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
-                      backgroundColor:
-                          absent ? Color(0xffD20000) : Colors.white,
+                      backgroundColor: absent ?     Color(0xffD20000):Colors.white,
                       side: BorderSide(color: Color(0xffD20000), width: 2)),
                   child: absent
-                      ? SvgPicture.asset(
-                          'assets/images/whiteCross.svg',
-                        )
-                      : SvgPicture.asset(
-                          'assets/images/RedClear.svg',
-                        ),
+                      ?SvgPicture.asset(
+                    'assets/images/whiteCross.svg',
+                  ):
+                  SvgPicture.asset(
+                    'assets/images/RedClear.svg',
+                  )
+
+
                 ),
               ]),
             ),
