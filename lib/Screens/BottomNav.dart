@@ -62,7 +62,7 @@ class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     List<Widget> _widgetOptions = <Widget>[
-      Home(),
+      Home(accessToken: widget.accessToken, refreshToken: widget.refreshToken,),
       Calendar(),
       ProfilePage(
         accessToken: widget.accessToken,
