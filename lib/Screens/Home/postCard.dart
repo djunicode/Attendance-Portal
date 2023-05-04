@@ -13,6 +13,7 @@ class PostCard extends StatefulWidget {
   int? batchID;
   String? batchName;
   String? subjectName;
+  int? lectureID;
 
   PostCard(
       {Key? key,
@@ -24,7 +25,8 @@ class PostCard extends StatefulWidget {
       required this.subject,
       required this.batchID,
       required this.subjectName,
-      required this.batchName})
+      required this.batchName,
+      required this.lectureID})
       : super(key: key);
 
   @override
@@ -50,6 +52,7 @@ class _PostCardState extends State<PostCard> {
               endTime: widget.endTime,
               batchName: widget.batchName,
               subjectName: widget.subjectName,
+              lectureID: widget.lectureID,
             ),
           ));
         },

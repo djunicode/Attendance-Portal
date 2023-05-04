@@ -65,6 +65,7 @@ class _HomeState extends State<Home> {
                             "Semester ${snapshot.data!.Lectures[index].batch.semester} Batch ${snapshot.data!.Lectures[index].batch.name}",
                         subjectName:
                             snapshot.data!.Lectures[index].subject.name,
+                        lectureID: snapshot.data!.Lectures[index].id,
                       ),
                     ],
                   );
@@ -106,6 +107,7 @@ class _HomeState extends State<Home> {
                             "Semester ${snapshot.data!.Lectures[index].batch.semester} Batch ${snapshot.data!.Lectures[index].batch.name}",
                         subjectName:
                             snapshot.data!.Lectures[index].subject.name,
+                        lectureID: snapshot.data!.Lectures[index].id,
                       ),
                     ],
                   );

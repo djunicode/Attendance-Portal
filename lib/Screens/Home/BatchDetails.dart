@@ -14,6 +14,8 @@ class BatchDetails extends StatefulWidget {
   String? startTime;
   String? batchName;
   String? subjectName;
+  int? lectureID;
+
   BatchDetails(
       {Key? key,
       this.refreshToken,
@@ -22,7 +24,8 @@ class BatchDetails extends StatefulWidget {
       this.endTime,
       this.startTime,
       this.batchName,
-      this.subjectName})
+      this.subjectName,
+      this.lectureID})
       : super(key: key);
 
   @override
@@ -421,6 +424,7 @@ class _BatchDetailsState extends State<BatchDetails> {
                               MaterialPageRoute(
                                   builder: (context) => Attendance(
                                         details: snapshot.data,
+                                        lectureID: widget.lectureID,
                                       )),
                             );
                           },
