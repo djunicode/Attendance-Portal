@@ -10,6 +10,9 @@ class PostCard extends StatefulWidget {
   String? startTime;
   String? endTime;
   String? subject;
+  int? batchID;
+  String? batchName;
+  String? subjectName;
 
   PostCard(
       {Key? key,
@@ -18,7 +21,10 @@ class PostCard extends StatefulWidget {
       required this.batch,
       required this.endTime,
       required this.startTime,
-      required this.subject})
+      required this.subject,
+      required this.batchID,
+      required this.subjectName,
+      required this.batchName})
       : super(key: key);
 
   @override
@@ -38,7 +44,13 @@ class _PostCardState extends State<PostCard> {
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => BatchDetails(),
+            builder: (context) => BatchDetails(
+              batchID: widget.batchID,
+              startTime: widget.startTime,
+              endTime: widget.endTime,
+              batchName: widget.batchName,
+              subjectName: widget.subjectName,
+            ),
           ));
         },
         child: Container(
@@ -71,7 +83,7 @@ class _PostCardState extends State<PostCard> {
                       ),
                     ),
                     SizedBox(
-                      width: 40,
+                      width: width * 0.40,
                     ),
                     SizedBox(
                       width: 35,

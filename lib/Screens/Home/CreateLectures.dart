@@ -108,243 +108,243 @@ class _CreateLecturesState extends State<CreateLectures> {
     DateTime now = DateTime.now().add(Duration(days: 1));
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String formattedDate = formatter.format(DateTime.now());
-    print(formattedDate);
-    //DateFormat.yMd().format(now);
-    //DateFormat.MMMEd().format(now);
-    return SizedBox(
-      height: height * 0.6,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(32, 32, 32, 25.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Text(
-                  "Tomorrow: ",
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                ),
-                Text(
-                  formattedDate,
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                ),
-                SizedBox(
-                  width: width * 0.14,
-                ),
-                Icon(Icons.calendar_month_sharp)
-              ],
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            SelectWeekDays(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              days: _days,
-              border: false,
-              daysFillColor: Color(0xff0056D2),
-              unSelectedDayTextColor: Colors.grey,
-              selectedDayTextColor: Colors.white,
-              boxDecoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  colors: [const Color(0xffffff), const Color(0xffffff)],
-                  tileMode:
-                      TileMode.repeated, // repeats the gradient over the canvas
-                ),
-              ),
-              onSelect: (values) {
-                // <== Callback to handle the selected days
-                print(values);
-              },
-            ),
-            Container(
-              child: TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(13),
-                    fillColor: Colors.white,
-                    filled: true,
-                    hintText: "Enter room number",
-                    hintStyle: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey,
-                    ),
-                    errorStyle: TextStyle(
-                        color: Colors.red, fontWeight: FontWeight.w500),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(7.0),
-                      borderSide: BorderSide(color: Color(0xff848792)),
-                    )),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Room number not entered';
-                  } else if (value.length > 11) {
-                    return "Enter valid room number";
-                  }
-                  return null;
-                },
-                controller: roomController,
-                onSaved: (value) {
-                  roomNumber = roomController.text;
-                },
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              height: height * 0.06,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  hint: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: const Text("Select Batch"),
-                  ),
-                  value: value2,
-                  isExpanded: true,
-                  items: list2.map(buildMenuItem).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      value2 = value;
-                      _batch = value!;
-                    });
-                  },
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 19,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 2.0),
-              child: Row(
+    
+    return Expanded(
+      child: SizedBox(
+        height: height * 0.85,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(32, 32, 32, 25.0),
+          child: Column(
+            children: [
+              Row(
                 children: [
-                  GestureDetector(
-                    onTap: _showTimePickerfrom,
-                    child: Container(
-                      height: height * 0.06,
-                      width: width * 0.35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            width: 1,
-                            color: Colors.black,
-                          )),
-                      child: Center(
-                          child: Text(
-                        _timeOfDayfrom.format(context).toString(),
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 16),
-                      )),
-                    ),
+                  Text(
+                    "Tomorrow: ",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                  ),
+                  Text(
+                    formattedDate,
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                   ),
                   SizedBox(
-                    width: 15,
+                    width: width * 0.14,
                   ),
-                  GestureDetector(
-                    onTap: _showTimePickerto,
-                    child: Container(
-                      height: height * 0.06,
-                      width: width * 0.35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            width: 1,
-                            color: Colors.black,
-                          )),
-                      child: Center(
-                          child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
-                            child: Text("To "),
-                          ),
-                          Text(
-                            _timeOfDayto.format(context).toString(),
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 16),
-                          ),
-                        ],
-                      )),
-                    ),
-                  ),
+                  Icon(Icons.calendar_month_sharp)
                 ],
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: height * 0.06,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 1),
-                borderRadius: BorderRadius.circular(10),
+              SizedBox(
+                height: 10,
               ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  hint: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: const Text("Select Subject "),
+              SelectWeekDays(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                days: _days,
+                border: false,
+                daysFillColor: Color(0xff0056D2),
+                unSelectedDayTextColor: Colors.grey,
+                selectedDayTextColor: Colors.white,
+                boxDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    colors: [const Color(0xffffff), const Color(0xffffff)],
+                    tileMode:
+                        TileMode.repeated, // repeats the gradient over the canvas
                   ),
-                  value: value1,
-                  isExpanded: true,
-                  items: list1.map(buildMenuItem).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      value1 = value;
-                      _subject = value!;
-                    });
+                ),
+                onSelect: (values) {
+                  // <== Callback to handle the selected days
+                  print(values);
+                },
+              ),
+              Container(
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(13),
+                      fillColor: Colors.white,
+                      filled: true,
+                      hintText: "Enter room number",
+                      hintStyle: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey,
+                      ),
+                      errorStyle: TextStyle(
+                          color: Colors.red, fontWeight: FontWeight.w500),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(7.0),
+                        borderSide: BorderSide(color: Color(0xff848792)),
+                      )),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Room number not entered';
+                    } else if (value.length > 11) {
+                      return "Enter valid room number";
+                    }
+                    return null;
+                  },
+                  controller: roomController,
+                  onSaved: (value) {
+                    roomNumber = roomController.text;
                   },
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: 50,
-              width: double.infinity,
-              // margin: EdgeInsets.symmetric(horizontal: 30),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xff0056D2),
+              SizedBox(
+                height: 10,
               ),
-              child: InkWell(
-                onTap: () async {
-                  print(formattedDate);
-                  await createLecture(
-                    roomNumber,
-                    _startTime,
-                    _endTime,
-                    formattedDate,
-                    'note',
-                    true,
-                    1,
-                    9,
-                    2,
-                  );
-                  Navigator.pop(context);
-                },
-                borderRadius: BorderRadius.circular(10),
-                child: const Center(
-                  child: Text(
-                    "Create Lecture",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
+              Container(
+                height: height * 0.06,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    hint: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: const Text("Select Batch"),
+                    ),
+                    value: value2,
+                    isExpanded: true,
+                    items: list2.map(buildMenuItem).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        value2 = value;
+                        _batch = value!;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: _showTimePickerfrom,
+                      child: Container(
+                        height: height * 0.06,
+                        width: width * 0.35,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              width: 1,
+                              color: Colors.black,
+                            )),
+                        child: Center(
+                            child: Text(
+                          _timeOfDayfrom.format(context).toString(),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 16),
+                        )),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    GestureDetector(
+                      onTap: _showTimePickerto,
+                      child: Container(
+                        height: height * 0.06,
+                        width: width * 0.35,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              width: 1,
+                              color: Colors.black,
+                            )),
+                        child: Center(
+                            child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20.0),
+                              child: Text("To "),
+                            ),
+                            Text(
+                              _timeOfDayto.format(context).toString(),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 16),
+                            ),
+                          ],
+                        )),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: height * 0.06,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    hint: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: const Text("Select Subject "),
+                    ),
+                    value: value1,
+                    isExpanded: true,
+                    items: list1.map(buildMenuItem).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        value1 = value;
+                        _subject = value!;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: 50,
+                width: double.infinity,
+                // margin: EdgeInsets.symmetric(horizontal: 30),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color(0xff0056D2),
+                ),
+                child: InkWell(
+                  onTap: () async {
+                    print(formattedDate);
+                    await createLecture(
+                      roomNumber,
+                      _startTime,
+                      _endTime,
+                      formattedDate,
+                      'note',
+                      true,
+                      1,
+                      9,
+                      2,
+                    );
+                    Navigator.of(context).pop();
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: const Center(
+                    child: Text(
+                      "Create Lecture",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -390,9 +390,9 @@ Future<String?> createLecture(
   print(res.statusCode);
   print(res.body);
   if (res.statusCode == 201) {
-    Utils.showSnackBar2(res.body);
+    Utils.showSnackBar1("Lecture created");
   } else {
-    Utils.showSnackBar1("Enter correct value");
+    Utils.showSnackBar("Enter correct value");
   }
   Map data = jsonDecode(res.body);
 

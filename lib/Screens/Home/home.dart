@@ -45,7 +45,7 @@ class _HomeState extends State<Home> {
                     children: [
                       Padding(
                           padding:
-                              const EdgeInsets.fromLTRB(31.0, 19, 200, 0.0),
+                              const EdgeInsets.fromLTRB(11.0, 19, 200, 0.0),
                           child: Text(
                             snapshot.data!.Lectures[index].date,
                             style: TextStyle(
@@ -55,9 +55,16 @@ class _HomeState extends State<Home> {
                         refreshToken: widget.refreshToken,
                         accessToken: widget.accessToken,
                         batch: snapshot.data!.Lectures[index].batch.name,
-                        endTime: snapshot.data!.Lectures[index].endTime,
-                        startTime: snapshot.data!.Lectures[index].startTime,
+                        endTime: snapshot.data!.Lectures[index].endTime
+                            .substring(0, 5),
+                        startTime: snapshot.data!.Lectures[index].startTime
+                            .substring(0, 5),
                         subject: snapshot.data!.Lectures[index].subject.name,
+                        batchID: snapshot.data!.Lectures[index].batch.id,
+                        batchName:
+                            "Semester ${snapshot.data!.Lectures[index].batch.semester} Batch ${snapshot.data!.Lectures[index].batch.name}",
+                        subjectName:
+                            snapshot.data!.Lectures[index].subject.name,
                       ),
                     ],
                   );
@@ -77,36 +84,31 @@ class _HomeState extends State<Home> {
                 itemCount: snapshot.data?.Lectures.length,
                 itemBuilder: (context, index) {
                   print(snapshot.data?.Lectures.length);
-                  return snapshot.hasData
-                      ? Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(0.0, 19, 239, 0.0),
-                              child: Text(snapshot.data!.Lectures[index].date,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w200,
-                                      fontSize: 16)),
-                            ),
-                            PostCard(
-                              refreshToken: widget.refreshToken,
-                              accessToken: widget.accessToken,
-                              batch: snapshot.data!.Lectures[index].batch.name,
-                              endTime: snapshot.data!.Lectures[index].endTime,
-                              startTime:
-                                  snapshot.data!.Lectures[index].startTime,
-                              subject:
-                                  snapshot.data!.Lectures[index].subject.name,
-                            ),
-                          ],
-                        )
-                      : !snapshot.hasError
-                          ? Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : Center(
-                              child: Text("Error occured!"),
-                            );
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0.0, 19, 239, 0.0),
+                        child: Text(snapshot.data!.Lectures[index].date,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w200, fontSize: 16)),
+                      ),
+                      PostCard(
+                        refreshToken: widget.refreshToken,
+                        accessToken: widget.accessToken,
+                        batch: snapshot.data!.Lectures[index].batch.name,
+                        endTime: snapshot.data!.Lectures[index].endTime
+                            .substring(0, 5),
+                        startTime: snapshot.data!.Lectures[index].startTime
+                            .substring(0, 5),
+                        subject: snapshot.data!.Lectures[index].subject.name,
+                        batchID: snapshot.data!.Lectures[index].batch.id,
+                        batchName:
+                            "Semester ${snapshot.data!.Lectures[index].batch.semester} Batch ${snapshot.data!.Lectures[index].batch.name}",
+                        subjectName:
+                            snapshot.data!.Lectures[index].subject.name,
+                      ),
+                    ],
+                  );
                 })
             : !snapshot.hasError
                 ? Center(
