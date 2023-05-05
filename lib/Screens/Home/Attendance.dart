@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'package:attendance_portal/Models/AttendanceAPI.dart' as att;
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,6 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Models/BatchDataAPI.dart';
 import '../../Models/Utils.dart';
+
+List<att.AttendanceAPI> dataOfAttendance = [];
 
 class Attendance extends StatefulWidget {
   List<BatchDataAPI>? details;
@@ -38,7 +42,12 @@ class _AttendanceState extends State<Attendance> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                // dataOfAttendance.map((e) => null)
+                print(dataOfAttendance.map((e) => e.student));
+                print(dataOfAttendance.map((e) => e.lecture));
+                print(dataOfAttendance.map((e) => e.present));
+              },
               child: Container(
                 height: 55,
                 width: MediaQuery.of(context).size.width - 16,
@@ -202,11 +211,13 @@ Future<String?> postAttendance(
   String? accessToken = prefs.getString('accessToken');
   print(accessToken);
   String? lecId;
-  List dataOfLecs = [
-    {"present": true, "lecture": 28, "student": 1},
-    {"present": true, "lecture": 26, "student": 1},
-    {"present": true, "lecture": 23, "student": 1},
-  ];
+
+  att.AttendanceAPI attendanceAPI = new att.AttendanceAPI(
+      present: present!, lecture: lecture!, student: student!);
+  log(attendanceAPI.student.toString());
+
+  dataOfAttendance.add(attendanceAPI);
+  log(dataOfAttendance.toString());
 
   try {
     var res = await http.post(
@@ -216,9 +227,7 @@ Future<String?> postAttendance(
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $accessToken'
       },
-      body: jsonEncode(
-        dataOfLecs
-      ),
+      body: jsonEncode(dataOfAttendance),
     );
     print(res.statusCode);
     print(res.body);

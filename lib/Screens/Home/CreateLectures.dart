@@ -316,7 +316,7 @@ class _CreateLecturesState extends State<CreateLectures> {
                 ),
                 child: InkWell(
                   onTap: () async {
-                    print(formattedDate);
+
                     await createLecture(
                       roomNumber,
                       _startTime,
