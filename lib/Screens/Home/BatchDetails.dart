@@ -86,7 +86,7 @@ class _BatchDetailsState extends State<BatchDetails> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: 10,
+                        height: 5,
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
