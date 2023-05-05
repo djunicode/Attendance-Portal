@@ -479,7 +479,9 @@ Future<List<BatchDataAPI>?> GetBatchDetails(
   print(data);
   for (int i = 0; i < data.length; i++) {
     x.add(BatchDataAPI.fromJson(data[i]));
+
   }
+
   print(x);
   return x;
 }
