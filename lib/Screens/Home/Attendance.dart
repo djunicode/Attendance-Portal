@@ -206,7 +206,6 @@ Future<String?> postAttendance(
     {"present": true, "lecture": 28, "student": 1},
     {"present": true, "lecture": 26, "student": 1},
     {"present": true, "lecture": 23, "student": 1},
-    //{"present": true, "lecture": 4, "student": 1}
   ];
 
   try {
@@ -218,16 +217,15 @@ Future<String?> postAttendance(
         'Authorization': 'Bearer $accessToken'
       },
       body: jsonEncode(
-          //<String, dynamic>{"present": true, "lecture": 0, "student": 0}
         dataOfLecs
       ),
     );
     print(res.statusCode);
     print(res.body);
     if (res.statusCode == 202) {
-      Utils.showSnackBar1("Attendance recorded");
+      Utils.showSnackBar("Attendance recorded");
     } else {
-      Utils.showSnackBar(res.reasonPhrase);
+      Utils.showSnackBar1(res.reasonPhrase);
     }
     Map data = jsonDecode(res.body);
     print(data);
