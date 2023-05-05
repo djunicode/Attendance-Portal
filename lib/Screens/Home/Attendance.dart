@@ -10,8 +10,15 @@ import '../../Models/Utils.dart';
 class Attendance extends StatefulWidget {
   List<BatchDataAPI>? details;
   int? lectureID;
+  String? subjectName;
+  String? batchName;
 
-  Attendance({Key? key, required this.details, required this.lectureID})
+  Attendance(
+      {Key? key,
+      required this.details,
+      required this.lectureID,
+      required this.subjectName,
+      required this.batchName})
       : super(key: key);
 
   @override
@@ -43,7 +50,7 @@ class _AttendanceState extends State<Attendance> {
         title: Column(
           children: [
             Text(
-              "SE Comps",
+              widget.batchName!,
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -51,7 +58,7 @@ class _AttendanceState extends State<Attendance> {
                   fontFamily: 'Montserrat'),
             ),
             Text(
-              "Maths",
+              widget.subjectName!,
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,

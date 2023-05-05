@@ -425,6 +425,8 @@ class _BatchDetailsState extends State<BatchDetails> {
                                   builder: (context) => Attendance(
                                         details: snapshot.data,
                                         lectureID: widget.lectureID,
+                                        subjectName: widget.subjectName,
+                                        batchName: widget.batchName,
                                       )),
                             );
                           },
