@@ -26,6 +26,30 @@ class _AttendanceState extends State<Attendance> {
     var width = size.width;
 
     return Scaffold(
+      persistentFooterButtons: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () {},
+              child: Container(
+                height: 55,
+                width: MediaQuery.of(context).size.width - 16,
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(12),
+                    shape: BoxShape.rectangle),
+                child: Center(
+                    child: Text(
+                  "Download",
+                  style: TextStyle(color: Colors.white),
+                )),
+              ),
+            ),
+          ],
+        )
+      ],
       appBar: AppBar(
         toolbarHeight: height * 0.12,
         elevation: 0.7,
@@ -171,25 +195,38 @@ Future<String?> postAttendance(
   String? accessToken = prefs.getString('accessToken');
   print(accessToken);
   String? lecId;
-  var res = await http.post(
-    Uri.parse(
-        'http://attendanceportal.pythonanywhere.com/attendance/lecture-attendance/'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer $accessToken'
-    },
-    body: jsonEncode(
-        <String, dynamic>{"present": true, "lecture": 0, "student": 0}),
-  );
-  print(res.statusCode);
-  print(res.body);
-  if (res.statusCode == 201) {
-    Utils.showSnackBar1("Attendance recorded");
-  } else {
-    Utils.showSnackBar(res.reasonPhrase);
+  List dataOfLecs = [
+    {"present": true, "lecture": 28, "student": 1},
+    {"present": true, "lecture": 26, "student": 1},
+    {"present": true, "lecture": 23, "student": 1},
+    //{"present": true, "lecture": 4, "student": 1}
+  ];
+
+  try {
+    var res = await http.post(
+      Uri.parse(
+          'http://attendanceportal.pythonanywhere.com/attendance/lecture-attendance/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $accessToken'
+      },
+      body: jsonEncode(
+          //<String, dynamic>{"present": true, "lecture": 0, "student": 0}
+        dataOfLecs
+      ),
+    );
+    print(res.statusCode);
+    print(res.body);
+    if (res.statusCode == 202) {
+      Utils.showSnackBar1("Attendance recorded");
+    } else {
+      Utils.showSnackBar(res.reasonPhrase);
+    }
+    Map data = jsonDecode(res.body);
+    print(data);
+  } catch (e) {
+    print(e.toString());
   }
-  Map data = jsonDecode(res.body);
-  print(data);
 
   return lecId;
 }
