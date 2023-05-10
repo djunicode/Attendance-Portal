@@ -38,32 +38,60 @@ class _AttendanceState extends State<Attendance> {
 
     return Scaffold(
       persistentFooterButtons: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () async {
-                await downloadAttendance(dataOfAttendance);
-                // print(dataOfAttendance.map((e) => e.student));
-                // print(dataOfAttendance.map((e) => e.lecture));
-                // print(dataOfAttendance.map((e) => e.present));
-              },
-              child: Container(
-                height: 55,
-                width: MediaQuery.of(context).size.width - 16,
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(12),
-                    shape: BoxShape.rectangle),
-                child: Center(
-                    child: Text(
-                  "Download",
-                  style: TextStyle(color: Colors.white),
-                )),
+// <<<<<<< HEAD
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             GestureDetector(
+//               onTap: () async {
+//                 await downloadAttendance(dataOfAttendance);
+//                 // print(dataOfAttendance.map((e) => e.student));
+//                 // print(dataOfAttendance.map((e) => e.lecture));
+//                 // print(dataOfAttendance.map((e) => e.present));
+//               },
+//               child: Container(
+//                 height: 55,
+//                 width: MediaQuery.of(context).size.width - 16,
+//                 padding: EdgeInsets.all(12),
+//                 decoration: BoxDecoration(
+//                     color: Colors.blue,
+//                     borderRadius: BorderRadius.circular(12),
+//                     shape: BoxShape.rectangle),
+//                 child: Center(
+//                     child: Text(
+//                   "Download",
+//                   style: TextStyle(color: Colors.white),
+//                 )),
+// =======
+        Container(
+          height: 50,
+          width: double.infinity,
+          margin: EdgeInsets.symmetric(horizontal: 30),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Color(0xff0056D2),
+          ),
+          child: InkWell(
+            onTap: () async {
+              // dataOfAttendance.map((e) => null)
+              print(dataOfAttendance.map((e) => e.student));
+              print(dataOfAttendance.map((e) => e.lecture));
+              print(dataOfAttendance.map((e) => e.present));
+              //await postAttendance(dataOfAttendance);
+            },
+            borderRadius: BorderRadius.circular(10),
+            child: const Center(
+              child: Text(
+                "Download",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+
               ),
             ),
-          ],
+          ),
         )
       ],
       appBar: AppBar(
@@ -163,8 +191,13 @@ class _TilesState extends State<Tiles> {
                   widget.present = !widget.present;
                   widget.absent = false;
                 });
-                await postAttendance(widget.present, widget.lectureID,
-                    widget.details![widget.index!].id);
+                att.AttendanceAPI attendanceAPI = att.AttendanceAPI(
+                    present: widget.present,
+                    lecture: widget.lectureID!,
+                    student: widget.details![widget.index!].id);
+                log(attendanceAPI.student.toString());
+
+                dataOfAttendance.add(attendanceAPI);
               },
               style: ElevatedButton.styleFrom(
                   shape: CircleBorder(),
@@ -184,8 +217,6 @@ class _TilesState extends State<Tiles> {
                   widget.absent = !widget.absent;
                   widget.present = false;
                 });
-                await postAttendance(widget.present, widget.lectureID,
-                    widget.details![widget.index!].id);
               },
               style: ElevatedButton.styleFrom(
                   shape: CircleBorder(),
@@ -205,91 +236,96 @@ class _TilesState extends State<Tiles> {
   }
 }
 
+
 Future<String?> postAttendance(
     bool? present, int? lecture, int? student) async {
+
+  // Future<String?> postAttendance(List<att.AttendanceAPI> dataOfAttendance) async {
+  // >>>>>>> 3c99490ed229a8ce434c1a1b7c7892ef5bb15d39
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? accessToken = prefs.getString('accessToken');
   print(accessToken);
   String? lecId;
+  // <<<<<<< HEAD
 
   att.AttendanceAPI attendanceAPI = new att.AttendanceAPI(
-      present: present!, lecture: lecture!, student: student!);
+  present: present!, lecture: lecture!, student: student!);
   log(attendanceAPI.student.toString());
 
   dataOfAttendance.add(attendanceAPI);
+  // =======
+  // >>>>>>> 3c99490ed229a8ce434c1a1b7c7892ef5bb15d39
   log(dataOfAttendance.toString());
 
   try {
-    var res = await http.post(
-      Uri.parse(
-          'http://attendanceportal.pythonanywhere.com/attendance/lecture-attendance/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $accessToken'
-      },
-      body: jsonEncode(
-          //<String, dynamic>{"present": true, "lecture": 0, "student": 0}
-          dataOfAttendance),
-    );
-    print(res.statusCode);
-    print(res.body);
-    if (res.statusCode == 202) {
-      Utils.showSnackBar1("Attendance recorded");
-    } else {
-      Utils.showSnackBar(res.reasonPhrase);
-    }
-    Map data = jsonDecode(res.body);
-    print(data);
+  var res = await http.post(
+  Uri.parse(
+  'http://attendanceportal.pythonanywhere.com/attendance/lecture-attendance/'),
+  headers: <String, String>{
+  'Content-Type': 'application/json; charset=UTF-8',
+  'Authorization': 'Bearer $accessToken'
+  },
+  body: jsonEncode(dataOfAttendance),
+  );
+  print(res.statusCode);
+  print(res.body);
+  if (res.statusCode == 202) {
+  Utils.showSnackBar("Attendance recorded");
+  } else {
+  Utils.showSnackBar1(res.reasonPhrase);
+  }
+  Map data = jsonDecode(res.body);
+  print(data);
   } catch (e) {
-    print(e.toString());
+  print(e.toString());
   }
 
   return lecId;
-}
-
-Future<String?> downloadAttendance(
-    List<att.AttendanceAPI>? attendanceList) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? accessToken = prefs.getString('accessToken');
-  String? csv;
-
-  // att.AttendanceAPI attendanceAPI = new att.AttendanceAPI(present: present!, lecture: lecture!, student: student!);
-  // log(attendanceAPI.student.toString());
-  //
-  // dataOfAttendance.add(attendanceAPI);
-  // log(dataOfAttendance.toString());
-
-  try {
-    var res = await http.post(
-      Uri.parse(
-          'http://attendanceportal.pythonanywhere.com/attendance/download-attendance/'),
-      headers: <String, String>{
-       'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $accessToken'
-      },
-      body:
-        jsonEncode({"present": true, "lecture": 26, "student": 1}),
-        // {"present": true, "lecture": 28, "student": 2}
-
-          //dataOfAttendance
-
-    );
-    print(dataOfAttendance.map((e) => e.student));
-    print(res.statusCode);
-    //print(res.body);
-
-    if (res.statusCode == 200) {
-      Utils.showSnackBar1("Attendance recorded");
-      log(res.body);
-    } else {
-      Utils.showSnackBar(res.reasonPhrase);
-    }
-    Map data = jsonDecode(res.body);
-    print(data);
-    csv = data.toString();
-  } catch (e) {
-    print(e.toString());
   }
 
-  return csv;
-}
+// Future<String?> downloadAttendance(
+//     List<att.AttendanceAPI>? attendanceList) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   String? accessToken = prefs.getString('accessToken');
+//   String? csv;
+//
+//   // att.AttendanceAPI attendanceAPI = new att.AttendanceAPI(present: present!, lecture: lecture!, student: student!);
+//   // log(attendanceAPI.student.toString());
+//   //
+//   // dataOfAttendance.add(attendanceAPI);
+//   // log(dataOfAttendance.toString());
+//
+//   try {
+//     var res = await http.post(
+//       Uri.parse(
+//           'http://attendanceportal.pythonanywhere.com/attendance/download-attendance/'),
+//       headers: <String, String>{
+//        'Content-Type': 'application/json; charset=UTF-8',
+//         'Authorization': 'Bearer $accessToken'
+//       },
+//       body:
+//         jsonEncode({"present": true, "lecture": 26, "student": 1}),
+//         // {"present": true, "lecture": 28, "student": 2}
+//
+//           //dataOfAttendance
+//
+//     );
+//     print(dataOfAttendance.map((e) => e.student));
+//     print(res.statusCode);
+//     //print(res.body);
+//
+//     if (res.statusCode == 200) {
+//       Utils.showSnackBar1("Attendance recorded");
+//       log(res.body);
+//     } else {
+//       Utils.showSnackBar(res.reasonPhrase);
+//     }
+//     Map data = jsonDecode(res.body);
+//     print(data);
+//     csv = data.toString();
+//   } catch (e) {
+//     print(e.toString());
+//   }
+//
+//   return csv;
+//}
