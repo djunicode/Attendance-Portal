@@ -40,12 +40,11 @@ class _HomeState extends State<Home> {
             ? ListView.builder(
                 itemCount: snapshot.data?.Lectures.length,
                 itemBuilder: (context, index) {
-                  print(snapshot.data?.Lectures.length);
                   return Column(
                     children: [
                       Padding(
                           padding:
-                              const EdgeInsets.fromLTRB(11.0, 19, 200, 0.0),
+                              const EdgeInsets.fromLTRB(0.0, 19, 239, 0.0),
                           child: Text(
                             snapshot.data!.Lectures[index].date,
                             style: TextStyle(

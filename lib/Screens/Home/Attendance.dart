@@ -38,32 +38,34 @@ class _AttendanceState extends State<Attendance> {
 
     return Scaffold(
       persistentFooterButtons: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () {
-                // dataOfAttendance.map((e) => null)
-                print(dataOfAttendance.map((e) => e.student));
-                print(dataOfAttendance.map((e) => e.lecture));
-                print(dataOfAttendance.map((e) => e.present));
-              },
-              child: Container(
-                height: 55,
-                width: MediaQuery.of(context).size.width - 16,
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(12),
-                    shape: BoxShape.rectangle),
-                child: Center(
-                    child: Text(
-                  "Download",
-                  style: TextStyle(color: Colors.white),
-                )),
+        Container(
+          height: 50,
+          width: double.infinity,
+          margin: EdgeInsets.symmetric(horizontal: 30),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Color(0xff0056D2),
+          ),
+          child: InkWell(
+            onTap: () async {
+              // dataOfAttendance.map((e) => null)
+              print(dataOfAttendance.map((e) => e.student));
+              print(dataOfAttendance.map((e) => e.lecture));
+              print(dataOfAttendance.map((e) => e.present));
+              await postAttendance(dataOfAttendance);
+            },
+            borderRadius: BorderRadius.circular(10),
+            child: const Center(
+              child: Text(
+                "Download",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
-          ],
+          ),
         )
       ],
       appBar: AppBar(
@@ -163,8 +165,13 @@ class _TilesState extends State<Tiles> {
                   widget.present = !widget.present;
                   widget.absent = false;
                 });
-                await postAttendance(widget.present, widget.lectureID,
-                    widget.details![widget.index!].id);
+                att.AttendanceAPI attendanceAPI = att.AttendanceAPI(
+                    present: widget.present,
+                    lecture: widget.lectureID!,
+                    student: widget.details![widget.index!].id);
+                log(attendanceAPI.student.toString());
+
+                dataOfAttendance.add(attendanceAPI);
               },
               style: ElevatedButton.styleFrom(
                   shape: CircleBorder(),
@@ -184,8 +191,6 @@ class _TilesState extends State<Tiles> {
                   widget.absent = !widget.absent;
                   widget.present = false;
                 });
-                await postAttendance(widget.present, widget.lectureID,
-                    widget.details![widget.index!].id);
               },
               style: ElevatedButton.styleFrom(
                   shape: CircleBorder(),
@@ -205,18 +210,11 @@ class _TilesState extends State<Tiles> {
   }
 }
 
-Future<String?> postAttendance(
-    bool? present, int? lecture, int? student) async {
+Future<String?> postAttendance(List<att.AttendanceAPI> dataOfAttendance) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? accessToken = prefs.getString('accessToken');
   print(accessToken);
   String? lecId;
-
-  att.AttendanceAPI attendanceAPI = new att.AttendanceAPI(
-      present: present!, lecture: lecture!, student: student!);
-  log(attendanceAPI.student.toString());
-
-  dataOfAttendance.add(attendanceAPI);
   log(dataOfAttendance.toString());
 
   try {
