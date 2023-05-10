@@ -11,7 +11,6 @@ import '../../Models/Utils.dart';
 
 List<att.AttendanceAPI> dataOfAttendance = [];
 
-
 class Attendance extends StatefulWidget {
   List<BatchDataAPI>? details;
   int? lectureID;
@@ -25,7 +24,6 @@ class Attendance extends StatefulWidget {
       required this.subjectName,
       required this.batchName})
       : super(key: key);
-
 
   @override
   State<Attendance> createState() => _AttendanceState();
@@ -44,11 +42,11 @@ class _AttendanceState extends State<Attendance> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: () {
-                // dataOfAttendance.map((e) => null)
-                print(dataOfAttendance.map((e) => e.student));
-                print(dataOfAttendance.map((e) => e.lecture));
-                print(dataOfAttendance.map((e) => e.present));
+              onTap: () async {
+                await downloadAttendance(dataOfAttendance);
+                // print(dataOfAttendance.map((e) => e.student));
+                // print(dataOfAttendance.map((e) => e.lecture));
+                // print(dataOfAttendance.map((e) => e.present));
               },
               child: Container(
                 height: 55,
@@ -132,9 +130,7 @@ class Tiles extends StatefulWidget {
       {Key? key,
       required this.details,
       required this.index,
-      required this.lectureID
-      }
-      )
+      required this.lectureID})
       : super(key: key);
 
   @override
@@ -209,13 +205,15 @@ class _TilesState extends State<Tiles> {
   }
 }
 
-Future<String?> postAttendance(bool? present, int? lecture, int? student) async {
+Future<String?> postAttendance(
+    bool? present, int? lecture, int? student) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? accessToken = prefs.getString('accessToken');
   print(accessToken);
   String? lecId;
-  
-  att.AttendanceAPI attendanceAPI = new att.AttendanceAPI(present: present!, lecture: lecture!, student: student!);
+
+  att.AttendanceAPI attendanceAPI = new att.AttendanceAPI(
+      present: present!, lecture: lecture!, student: student!);
   log(attendanceAPI.student.toString());
 
   dataOfAttendance.add(attendanceAPI);
@@ -231,8 +229,7 @@ Future<String?> postAttendance(bool? present, int? lecture, int? student) async 
       },
       body: jsonEncode(
           //<String, dynamic>{"present": true, "lecture": 0, "student": 0}
-        dataOfAttendance
-      ),
+          dataOfAttendance),
     );
     print(res.statusCode);
     print(res.body);
@@ -248,4 +245,51 @@ Future<String?> postAttendance(bool? present, int? lecture, int? student) async 
   }
 
   return lecId;
+}
+
+Future<String?> downloadAttendance(
+    List<att.AttendanceAPI>? attendanceList) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? accessToken = prefs.getString('accessToken');
+  String? csv;
+
+  // att.AttendanceAPI attendanceAPI = new att.AttendanceAPI(present: present!, lecture: lecture!, student: student!);
+  // log(attendanceAPI.student.toString());
+  //
+  // dataOfAttendance.add(attendanceAPI);
+  // log(dataOfAttendance.toString());
+
+  try {
+    var res = await http.post(
+      Uri.parse(
+          'http://attendanceportal.pythonanywhere.com/attendance/download-attendance/'),
+      headers: <String, String>{
+       'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $accessToken'
+      },
+      body:
+        jsonEncode({"present": true, "lecture": 26, "student": 1}),
+        // {"present": true, "lecture": 28, "student": 2}
+
+          //dataOfAttendance
+
+    );
+    print(dataOfAttendance.map((e) => e.student));
+    print(res.statusCode);
+    //print(res.body);
+
+    if (res.statusCode == 200) {
+      Utils.showSnackBar1("Attendance recorded");
+      log(res.body);
+    } else {
+      Utils.showSnackBar(res.reasonPhrase);
+    }
+    Map data = jsonDecode(res.body);
+    print(data);
+    csv = data.toString();
+  } catch (e) {
+    print(e.toString());
+  }
+
+  return csv;
 }
