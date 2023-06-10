@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../DownloadingDialog.dart';
 import '../../Models/BatchDataAPI.dart';
 import '../../Models/Utils.dart';
 
@@ -73,11 +74,16 @@ class _AttendanceState extends State<Attendance> {
           ),
           child: InkWell(
             onTap: () async {
+              // downloadAttendance(dataOfAttendance);
               // dataOfAttendance.map((e) => null)
               print(dataOfAttendance.map((e) => e.student));
               print(dataOfAttendance.map((e) => e.lecture));
               print(dataOfAttendance.map((e) => e.present));
               //await postAttendance(dataOfAttendance);
+
+              showDialog(
+                  context: context,
+                  builder: (context)=> const DownloadingDialog(),);
             },
             borderRadius: BorderRadius.circular(10),
             child: const Center(
@@ -326,6 +332,5 @@ Future<String?> postAttendance(
 //   } catch (e) {
 //     print(e.toString());
 //   }
-//
-//   return csv;
+
 //}
