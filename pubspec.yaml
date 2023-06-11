@@ -38,6 +38,7 @@ dependencies:
   http: ^0.13.5
   animated_bottom_navigation_bar:
   syncfusion_flutter_calendar: ^20.4.51
+  open_file: ^3.3.1
   intl: ^0.18.0
   day_picker: ^2.1.1
   flutter_svg: ^2.0.4
@@ -46,7 +47,6 @@ dependencies:
   path_provider: ^2.0.15
   flutter_downloader: ^1.10.4
   permission_handler: ^10.3.0
-
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -5,10 +5,15 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../DownloadingDialog.dart';
 import '../../Models/BatchDataAPI.dart';
 import '../../Models/Utils.dart';
+import 'package:csv/csv.dart';
+import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 
 List<att.AttendanceAPI> dataOfAttendance = [];
 
@@ -39,31 +44,6 @@ class _AttendanceState extends State<Attendance> {
 
     return Scaffold(
       persistentFooterButtons: [
-// <<<<<<< HEAD
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             GestureDetector(
-//               onTap: () async {
-//                 await downloadAttendance(dataOfAttendance);
-//                 // print(dataOfAttendance.map((e) => e.student));
-//                 // print(dataOfAttendance.map((e) => e.lecture));
-//                 // print(dataOfAttendance.map((e) => e.present));
-//               },
-//               child: Container(
-//                 height: 55,
-//                 width: MediaQuery.of(context).size.width - 16,
-//                 padding: EdgeInsets.all(12),
-//                 decoration: BoxDecoration(
-//                     color: Colors.blue,
-//                     borderRadius: BorderRadius.circular(12),
-//                     shape: BoxShape.rectangle),
-//                 child: Center(
-//                     child: Text(
-//                   "Download",
-//                   style: TextStyle(color: Colors.white),
-//                 )),
-// =======
         Container(
           height: 50,
           width: double.infinity,
@@ -75,15 +55,18 @@ class _AttendanceState extends State<Attendance> {
           child: InkWell(
             onTap: () async {
               // downloadAttendance(dataOfAttendance);
-              // dataOfAttendance.map((e) => null)
-              print(dataOfAttendance.map((e) => e.student));
-              print(dataOfAttendance.map((e) => e.lecture));
-              print(dataOfAttendance.map((e) => e.present));
+              // dataOfAttendance.map((e) => null);
+              // print(dataOfAttendance.map((e) => e.student));
+              // print(dataOfAttendance.map((e) => e.lecture));
+              // print(dataOfAttendance.map((e) => e.present));
               //await postAttendance(dataOfAttendance);
 
-              showDialog(
-                  context: context,
-                  builder: (context)=> const DownloadingDialog(),);
+              // showDialog(
+              //     context: context,
+              //     builder: (context)=> const DownloadingDialog(),);
+              // print(dataOfAttendance[0].student);
+              await downloadAttendance(dataOfAttendance);
+
             },
             borderRadius: BorderRadius.circular(10),
             child: const Center(
@@ -94,7 +77,6 @@ class _AttendanceState extends State<Attendance> {
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                 ),
-
               ),
             ),
           ),
@@ -242,95 +224,88 @@ class _TilesState extends State<Tiles> {
   }
 }
 
-
-Future<String?> postAttendance(
-    bool? present, int? lecture, int? student) async {
-
-  // Future<String?> postAttendance(List<att.AttendanceAPI> dataOfAttendance) async {
-  // >>>>>>> 3c99490ed229a8ce434c1a1b7c7892ef5bb15d39
+Future<String?> postAttendance(List<att.AttendanceAPI> dataOfAttendance) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? accessToken = prefs.getString('accessToken');
   print(accessToken);
   String? lecId;
-  // <<<<<<< HEAD
-
-  att.AttendanceAPI attendanceAPI = new att.AttendanceAPI(
-  present: present!, lecture: lecture!, student: student!);
-  log(attendanceAPI.student.toString());
-
-  dataOfAttendance.add(attendanceAPI);
-  // =======
-  // >>>>>>> 3c99490ed229a8ce434c1a1b7c7892ef5bb15d39
   log(dataOfAttendance.toString());
 
   try {
-  var res = await http.post(
-  Uri.parse(
-  'http://attendanceportal.pythonanywhere.com/attendance/lecture-attendance/'),
-  headers: <String, String>{
-  'Content-Type': 'application/json; charset=UTF-8',
-  'Authorization': 'Bearer $accessToken'
-  },
-  body: jsonEncode(dataOfAttendance),
-  );
-  print(res.statusCode);
-  print(res.body);
-  if (res.statusCode == 202) {
-  Utils.showSnackBar("Attendance recorded");
-  } else {
-  Utils.showSnackBar1(res.reasonPhrase);
-  }
-  Map data = jsonDecode(res.body);
-  print(data);
+    var res = await http.post(
+      Uri.parse(
+          'http://attendanceportal.pythonanywhere.com/attendance/lecture-attendance/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $accessToken'
+      },
+      body: jsonEncode(dataOfAttendance),
+    );
+    print(res.statusCode);
+    print(res.body);
+    if (res.statusCode == 202) {
+      Utils.showSnackBar("Attendance recorded");
+    } else {
+      Utils.showSnackBar1(res.reasonPhrase);
+    }
+    Map data = jsonDecode(res.body);
+    print(data);
   } catch (e) {
-  print(e.toString());
+    print(e.toString());
   }
 
   return lecId;
+}
+
+Future<String?> downloadAttendance(
+    List<att.AttendanceAPI>? attendanceList) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? accessToken = prefs.getString('accessToken');
+  String? csv;
+
+  try {
+    var res = await http.post(
+      Uri.parse(
+          'http://attendanceportal.pythonanywhere.com/attendance/download-attendance/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $accessToken'
+      },
+      body: jsonEncode(attendanceList),
+    );
+    print(dataOfAttendance.map((e) => e.student));
+    print(res.statusCode);
+    print(res.body);
+
+    if (res.statusCode == 200 && await Permission.storage
+        .request()
+        .isGranted) {
+      Utils.showSnackBar1("Download started");
+
+
+      final directory = await getExternalStorageDirectory();
+      print(directory!.path);
+
+      var path = directory.path;
+      // log(path);
+
+      final file = File('$path/data.csv');
+
+
+      try {
+        await file.writeAsString(res.body);
+        OpenFile.open(path, type: csv);
+      } catch (e) {
+        print(e.toString());
+        Utils.showSnackBar(e.toString());
+      }
+    } else {
+      Utils.showSnackBar(res.reasonPhrase);
+    }
+    Map data = jsonDecode(res.body);
+    print(data);
+    csv = data.toString();
+  } catch (e) {
+    print(e.toString());
   }
-
-// Future<String?> downloadAttendance(
-//     List<att.AttendanceAPI>? attendanceList) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   String? accessToken = prefs.getString('accessToken');
-//   String? csv;
-//
-//   // att.AttendanceAPI attendanceAPI = new att.AttendanceAPI(present: present!, lecture: lecture!, student: student!);
-//   // log(attendanceAPI.student.toString());
-//   //
-//   // dataOfAttendance.add(attendanceAPI);
-//   // log(dataOfAttendance.toString());
-//
-//   try {
-//     var res = await http.post(
-//       Uri.parse(
-//           'http://attendanceportal.pythonanywhere.com/attendance/download-attendance/'),
-//       headers: <String, String>{
-//        'Content-Type': 'application/json; charset=UTF-8',
-//         'Authorization': 'Bearer $accessToken'
-//       },
-//       body:
-//         jsonEncode({"present": true, "lecture": 26, "student": 1}),
-//         // {"present": true, "lecture": 28, "student": 2}
-//
-//           //dataOfAttendance
-//
-//     );
-//     print(dataOfAttendance.map((e) => e.student));
-//     print(res.statusCode);
-//     //print(res.body);
-//
-//     if (res.statusCode == 200) {
-//       Utils.showSnackBar1("Attendance recorded");
-//       log(res.body);
-//     } else {
-//       Utils.showSnackBar(res.reasonPhrase);
-//     }
-//     Map data = jsonDecode(res.body);
-//     print(data);
-//     csv = data.toString();
-//   } catch (e) {
-//     print(e.toString());
-//   }
-
-//}
+}
