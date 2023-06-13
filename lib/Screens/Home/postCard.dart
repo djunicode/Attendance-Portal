@@ -86,7 +86,7 @@ class _PostCardState extends State<PostCard> {
                       ),
                     ),
                     SizedBox(
-                      width: width * 0.40,
+                      width: width * 0.37,
                     ),
                     SizedBox(
                       width: 35,

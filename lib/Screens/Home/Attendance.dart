@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:attendance_portal/Models/AttendanceAPI.dart' as att;
+import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +17,11 @@ import 'package:csv/csv.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'allCsvFileScreen.dart';
+import 'loadCsvDataScreen.dart';
+
 List<att.AttendanceAPI> dataOfAttendance = [];
+
 
 class Attendance extends StatefulWidget {
   List<BatchDataAPI>? details;
@@ -133,6 +139,128 @@ class _AttendanceState extends State<Attendance> {
       ),
     );
   }
+
+  Future<String?> downloadAttendance(
+      List<att.AttendanceAPI>? attendanceList) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    String? csv;
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat.yMMMMEEEEd().format(now);
+    dataOfAttendance.forEach( (item) {
+      print("Student: ${item.student} and attendance: ${item.present}");
+    });
+
+
+    // try {
+    //   var res = await http.post(
+    //     Uri.parse(
+    //         'http://attendanceportal.pythonanywhere.com/attendance/download-attendance/'),
+    //     headers: <String, String>{
+    //       'Content-Type': 'application/json; charset=UTF-8',
+    //       'Authorization': 'Bearer $accessToken'
+    //     },
+    //     body: jsonEncode(
+    //         {"present": true, "lecture": 26, "student": 1}
+    //     ),
+    //   );
+    //   //print(dataOfAttendance.map((e) => e.student));
+    //   print(res.statusCode);
+    //   //print(res.body);
+    //
+    //   if (res.statusCode == 200 && await Permission.storage.request().isGranted) {
+    //     //Utils.showSnackBar1("Download started");
+    //     print("Download started");
+    //
+    //     final directory = await getApplicationSupportDirectory();
+    //     print(directory.path);
+    //     var path = directory.path;
+    //     final file = File('$path/data.csv');
+    //
+    //
+    //
+    //     try {
+    //       await file.writeAsString(res.body);
+    //       OpenFile.open(path, type: csv);
+    //     } catch (e) {
+    //       print(e.toString());
+    //       Utils.showSnackBar(e.toString());
+    //     }
+    //   } else {
+    //     Utils.showSnackBar(res.reasonPhrase);
+    //   }
+    //   Map data = jsonDecode(res.body);
+    //   print(data);
+    //   csv = data.toString();
+    // } catch (e) {
+    //   print(e.toString());
+    // }
+    List<List<String>> data = [];
+    dataOfAttendance.forEach( (item) {
+        data.add([item.student.toString(),item.present.toString()]);
+
+      //print("Student: ${item.student} and attendance: ${item.present}");
+    });
+      // ["1", "1", "1"],
+      // ["2", "2", "2"],
+      // ["3", "3", "3"],
+
+    String csvData = ListToCsvConverter().convert(data);
+    final String directory = (await getApplicationSupportDirectory()).path;
+    final path = "$directory/csv-$formattedDate.csv";
+    print(path);
+    final File file = File(path);
+    await file.writeAsString(csvData);
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return AllCsvFilesScreen(
+              //path: path
+          );
+        },
+      ),
+    );
+    return csv;
+  }
+
+  loadCsvFromStorage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowedExtensions: ['csv'],
+      type: FileType.custom,
+    );
+    String? path = result?.files.first.path;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return AllCsvFilesScreen(
+              //path: path!
+          );
+        },
+      ),
+    );
+  }
+
+  Future<List<FileSystemEntity>> _getAllCsvFiles() async {
+    final String directory = (await getApplicationSupportDirectory()).path;
+    final path = "$directory/";
+    final myDir = Directory(path);
+    List<FileSystemEntity> _csvFiles;
+    _csvFiles = myDir.listSync(recursive: true, followLinks: false);
+    _csvFiles.sort((a, b) {
+      return b.path.compareTo(a.path);
+    });
+    return _csvFiles;
+  }
+
+  Future<List<List<dynamic>>> loadingCsvData(String path) async {
+    final csvFile = new File(path).openRead();
+    return await csvFile
+        .transform(utf8.decoder)
+        .transform(
+      CsvToListConverter(),
+    )
+        .toList();
+  }
 }
 
 class Tiles extends StatefulWidget {
@@ -182,7 +310,7 @@ class _TilesState extends State<Tiles> {
                 att.AttendanceAPI attendanceAPI = att.AttendanceAPI(
                     present: widget.present,
                     lecture: widget.lectureID!,
-                    student: widget.details![widget.index!].id);
+                    student: widget.details![widget.index!].sapId);
                 log(attendanceAPI.student.toString());
 
                 dataOfAttendance.add(attendanceAPI);
@@ -257,55 +385,55 @@ Future<String?> postAttendance(List<att.AttendanceAPI> dataOfAttendance) async {
   return lecId;
 }
 
-Future<String?> downloadAttendance(
-    List<att.AttendanceAPI>? attendanceList) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? accessToken = prefs.getString('accessToken');
-  String? csv;
-
-  try {
-    var res = await http.post(
-      Uri.parse(
-          'http://attendanceportal.pythonanywhere.com/attendance/download-attendance/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $accessToken'
-      },
-      body: jsonEncode(attendanceList),
-    );
-    print(dataOfAttendance.map((e) => e.student));
-    print(res.statusCode);
-    print(res.body);
-
-    if (res.statusCode == 200 && await Permission.storage
-        .request()
-        .isGranted) {
-      Utils.showSnackBar1("Download started");
-
-
-      final directory = await getExternalStorageDirectory();
-      print(directory!.path);
-
-      var path = directory.path;
-      // log(path);
-
-      final file = File('$path/data.csv');
-
-
-      try {
-        await file.writeAsString(res.body);
-        OpenFile.open(path, type: csv);
-      } catch (e) {
-        print(e.toString());
-        Utils.showSnackBar(e.toString());
-      }
-    } else {
-      Utils.showSnackBar(res.reasonPhrase);
-    }
-    Map data = jsonDecode(res.body);
-    print(data);
-    csv = data.toString();
-  } catch (e) {
-    print(e.toString());
-  }
-}
+//
+// <<<<<<< HEAD
+//   try {
+//     var res = await http.post(
+//       Uri.parse(
+//           'http://attendanceportal.pythonanywhere.com/attendance/download-attendance/'),
+//       headers: <String, String>{
+//         'Content-Type': 'application/json; charset=UTF-8',
+//         'Authorization': 'Bearer $accessToken'
+//       },
+//       body: jsonEncode(attendanceList),
+//     );
+//     print(dataOfAttendance.map((e) => e.student));
+//     print(res.statusCode);
+//     print(res.body);
+//
+//     if (res.statusCode == 200 && await Permission.storage
+//         .request()
+//         .isGranted) {
+//       Utils.showSnackBar1("Download started");
+//
+//
+//       final directory = await getExternalStorageDirectory();
+//       print(directory!.path);
+//
+//       var path = directory.path;
+//       // log(path);
+//
+//       final file = File('$path/data.csv');
+//
+//
+//       try {
+//         await file.writeAsString(res.body);
+//         OpenFile.open(path, type: csv);
+//       } catch (e) {
+//         print(e.toString());
+//         Utils.showSnackBar(e.toString());
+//       }
+//     } else {
+//       Utils.showSnackBar(res.reasonPhrase);
+//     }
+//     Map data = jsonDecode(res.body);
+//     print(data);
+//     csv = data.toString();
+//   } catch (e) {
+//     print(e.toString());
+//   }
+// }
+// =======
+//
+//
+// >>>>>>> a4926bc21aac99ad0d2f59575618925974b91ddc

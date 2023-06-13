@@ -1,5 +1,8 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:attendance_portal/Auth/log.dart';
 import 'package:attendance_portal/HomePage.dart';
+import 'package:attendance_portal/Screens/Home/home.dart';
+import 'package:attendance_portal/main.dart';
 import 'package:flutter/material.dart';
 
 
