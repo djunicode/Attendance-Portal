@@ -128,22 +128,23 @@ class _AttendanceState extends State<Attendance> {
   }
 
   Future downloadAttendance(List<att.AttendanceAPI>? attendanceList) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
     var res = await http.post(
       Uri.parse(
           'http://attendanceportal.pythonanywhere.com/attendance/mail-attendance/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $accessToken'
       },
       body: jsonEncode(<String, String>{
-        "student": "${attendanceList![0].student}",
-        "batch": "${attendanceList[0].lecture}",
-        "subject": "${attendanceList[0].present}",
+        "lecture": "${attendanceList![0].lecture}",
       }),
     );
     print(res.statusCode);
     print(res.body);
-    if (res.statusCode == 201) {
-      Utils.showSnackBar1("Lecture created");
+    if (res.statusCode == 200) {
+      Utils.showSnackBar1("hi");
     } else {
       Utils.showSnackBar("Enter correct value");
     }
