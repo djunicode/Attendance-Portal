@@ -21,7 +21,6 @@ import 'loadCsvDataScreen.dart';
 
 List<att.AttendanceAPI> dataOfAttendance = [];
 
-
 class Attendance extends StatefulWidget {
   List<BatchDataAPI>? details;
   int? lectureID;
@@ -128,126 +127,29 @@ class _AttendanceState extends State<Attendance> {
     );
   }
 
-  Future<String?> downloadAttendance(
-      List<att.AttendanceAPI>? attendanceList) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? accessToken = prefs.getString('accessToken');
-    String? csv;
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat.yMMMMEEEEd().format(now);
-    dataOfAttendance.forEach( (item) {
-      print("Student: ${item.student} and attendance: ${item.present}");
-    });
-
-
-    // try {
-    //   var res = await http.post(
-    //     Uri.parse(
-    //         'http://attendanceportal.pythonanywhere.com/attendance/download-attendance/'),
-    //     headers: <String, String>{
-    //       'Content-Type': 'application/json; charset=UTF-8',
-    //       'Authorization': 'Bearer $accessToken'
-    //     },
-    //     body: jsonEncode(
-    //         {"present": true, "lecture": 26, "student": 1}
-    //     ),
-    //   );
-    //   //print(dataOfAttendance.map((e) => e.student));
-    //   print(res.statusCode);
-    //   //print(res.body);
-    //
-    //   if (res.statusCode == 200 && await Permission.storage.request().isGranted) {
-    //     //Utils.showSnackBar1("Download started");
-    //     print("Download started");
-    //
-    //     final directory = await getApplicationSupportDirectory();
-    //     print(directory.path);
-    //     var path = directory.path;
-    //     final file = File('$path/data.csv');
-    //
-    //
-    //
-    //     try {
-    //       await file.writeAsString(res.body);
-    //       OpenFile.open(path, type: csv);
-    //     } catch (e) {
-    //       print(e.toString());
-    //       Utils.showSnackBar(e.toString());
-    //     }
-    //   } else {
-    //     Utils.showSnackBar(res.reasonPhrase);
-    //   }
-    //   Map data = jsonDecode(res.body);
-    //   print(data);
-    //   csv = data.toString();
-    // } catch (e) {
-    //   print(e.toString());
-    // }
-    List<List<String>> data = [];
-    dataOfAttendance.forEach( (item) {
-        data.add([item.student.toString(),item.present.toString()]);
-
-      //print("Student: ${item.student} and attendance: ${item.present}");
-    });
-      // ["1", "1", "1"],
-      // ["2", "2", "2"],
-      // ["3", "3", "3"],
-
-    String csvData = ListToCsvConverter().convert(data);
-    final String directory = (await getApplicationSupportDirectory()).path;
-    final path = "$directory/csv-$formattedDate.csv";
-    print(path);
-    final File file = File(path);
-    await file.writeAsString(csvData);
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) {
-          return AllCsvFilesScreen(
-              //path: path
-          );
-        },
-      ),
+  Future downloadAttendance(List<att.AttendanceAPI>? attendanceList) async {
+    var res = await http.post(
+      Uri.parse(
+          'http://attendanceportal.pythonanywhere.com/attendance/mail-attendance/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        "student": "${attendanceList![0].student}",
+        "batch": "${attendanceList[0].lecture}",
+        "subject": "${attendanceList[0].present}",
+      }),
     );
-    return csv;
-  }
+    print(res.statusCode);
+    print(res.body);
+    if (res.statusCode == 201) {
+      Utils.showSnackBar1("Lecture created");
+    } else {
+      Utils.showSnackBar("Enter correct value");
+    }
+    Map data = jsonDecode(res.body);
 
-  loadCsvFromStorage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowedExtensions: ['csv'],
-      type: FileType.custom,
-    );
-    String? path = result?.files.first.path;
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) {
-          return AllCsvFilesScreen(
-              //path: path!
-          );
-        },
-      ),
-    );
-  }
-
-  Future<List<FileSystemEntity>> _getAllCsvFiles() async {
-    final String directory = (await getApplicationSupportDirectory()).path;
-    final path = "$directory/";
-    final myDir = Directory(path);
-    List<FileSystemEntity> _csvFiles;
-    _csvFiles = myDir.listSync(recursive: true, followLinks: false);
-    _csvFiles.sort((a, b) {
-      return b.path.compareTo(a.path);
-    });
-    return _csvFiles;
-  }
-
-  Future<List<List<dynamic>>> loadingCsvData(String path) async {
-    final csvFile = new File(path).openRead();
-    return await csvFile
-        .transform(utf8.decoder)
-        .transform(
-      CsvToListConverter(),
-    )
-        .toList();
+    print(data);
   }
 }
 
@@ -373,6 +275,122 @@ Future<String?> postAttendance(List<att.AttendanceAPI> dataOfAttendance) async {
   return lecId;
 }
 
+// SharedPreferences prefs = await SharedPreferences.getInstance();
+// String? accessToken = prefs.getString('accessToken');
+// String? csv;
+// DateTime now = DateTime.now();
+// String formattedDate = DateFormat.yMMMMEEEEd().format(now);
+// dataOfAttendance.forEach( (item) {
+//   print("Student: ${item.student} and attendance: ${item.present}");
+// });
 
+// try {
+//   var res = await http.post(
+//     Uri.parse(
+//         'http://attendanceportal.pythonanywhere.com/attendance/download-attendance/'),
+//     headers: <String, String>{
+//       'Content-Type': 'application/json; charset=UTF-8',
+//       'Authorization': 'Bearer $accessToken'
+//     },
+//     body: jsonEncode(
+//         {"present": true, "lecture": 26, "student": 1}
+//     ),
+//   );
+//   //print(dataOfAttendance.map((e) => e.student));
+//   print(res.statusCode);
+//   //print(res.body);
+//
+//   if (res.statusCode == 200 && await Permission.storage.request().isGranted) {
+//     //Utils.showSnackBar1("Download started");
+//     print("Download started");
+//
+//     final directory = await getApplicationSupportDirectory();
+//     print(directory.path);
+//     var path = directory.path;
+//     final file = File('$path/data.csv');
+//
+//
+//
+//     try {
+//       await file.writeAsString(res.body);
+//       OpenFile.open(path, type: csv);
+//     } catch (e) {
+//       print(e.toString());
+//       Utils.showSnackBar(e.toString());
+//     }
+//   } else {
+//     Utils.showSnackBar(res.reasonPhrase);
+//   }
+//   Map data = jsonDecode(res.body);
+//   print(data);
+//   csv = data.toString();
+// } catch (e) {
+//   print(e.toString());
+// }
+// List<List<String>> data = [];
+// dataOfAttendance.forEach( (item) {
+//     data.add([item.student.toString(),item.present.toString()]);
 
+//   //print("Student: ${item.student} and attendance: ${item.present}");
+// });
+// ["1", "1", "1"],
+// ["2", "2", "2"],
+// ["3", "3", "3"],
 
+//   String csvData = ListToCsvConverter().convert(data);
+//   final String directory = (await getApplicationSupportDirectory()).path;
+//   final path = "$directory/csv-$formattedDate.csv";
+//   print(path);
+//   final File file = File(path);
+//   await file.writeAsString(csvData);
+//   Navigator.of(context).push(
+//     MaterialPageRoute(
+//       builder: (_) {
+//         return AllCsvFilesScreen(
+//             //path: path
+//         );
+//       },
+//     ),
+//   );
+//   return csv;
+// }
+
+// loadCsvFromStorage() async {
+//   FilePickerResult? result = await FilePicker.platform.pickFiles(
+//     allowedExtensions: ['csv'],
+//     type: FileType.custom,
+//   );
+//   String? path = result?.files.first.path;
+//   Navigator.of(context).push(
+//     MaterialPageRoute(
+//       builder: (_) {
+//         return AllCsvFilesScreen(
+//             //path: path!
+//         );
+//       },
+//     ),
+//   );
+// }
+
+// Future<List<FileSystemEntity>> _getAllCsvFiles() async {
+//   final String directory = (await getApplicationSupportDirectory()).path;
+//   final path = "$directory/";
+//   final myDir = Directory(path);
+//   List<FileSystemEntity> _csvFiles;
+//   _csvFiles = myDir.listSync(recursive: true, followLinks: false);
+//   _csvFiles.sort((a, b) {
+//     return b.path.compareTo(a.path);
+//   });
+//   return _csvFiles;
+//}
+
+// Future<List<List<dynamic>>> loadingCsvData(String path) async {
+//   final csvFile = new File(path).openRead();
+//   return await csvFile
+//       .transform(utf8.decoder)
+//       .transform(
+//     CsvToListConverter(),
+//   )
+//       .toList();
+// }
+//}
