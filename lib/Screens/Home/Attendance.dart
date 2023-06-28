@@ -143,13 +143,12 @@ class _AttendanceState extends State<Attendance> {
     );
     print(res.statusCode);
     print(res.body);
-    if (res.statusCode == 200) {
-      Utils.showSnackBar1("hi");
-    } else {
-      Utils.showSnackBar("Enter correct value");
-    }
     Map data = jsonDecode(res.body);
-
+    if (res.statusCode == 200) {
+      Utils.showSnackBar1(data['message']);
+    } else {
+      Utils.showSnackBar(data['error']);
+    }
     print(data);
   }
 }
