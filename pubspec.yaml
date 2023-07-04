@@ -40,7 +40,7 @@ dependencies:
   syncfusion_flutter_calendar: ^20.4.51
   open_file: ^3.3.1
   intl: ^0.18.0
-  day_picker: ^2.1.1
+  day_picker:
   flutter_svg: ^2.0.4
   shared_preferences: ^2.0.18
   dio: ^5.2.0+1

@@ -233,182 +233,182 @@ class _BatchDetailsState extends State<BatchDetails> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          GestureDetector(
-                            onTap: () async {
-                              showDialog<void>(
-                                context: context,
-                                barrierDismissible: true,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: IntrinsicWidth(
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            "What do you want to edit?",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: 'Montserrat'),
-                                          ),
-                                          Divider(
-                                            color: Colors.black,
-                                            thickness: 2,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    content: SingleChildScrollView(
-                                        child: IntrinsicHeight(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text(
-                                              "One lecture",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15),
-                                            ),
-                                          ),
-                                          VerticalDivider(
-                                            color: Colors.black,
-                                            thickness: 2,
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text(
-                                              "Schedule",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )),
-                                  );
-                                },
-                              );
-                            },
-                            child: Container(
-                              height: height * 0.05,
-                              width: width * 0.35,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    width: 1,
-                                    color: Colors.black,
-                                  )),
-                              child: Center(
-                                child: Text(
-                                  "Edit",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montserrat'),
-                                ),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              showDialog<void>(
-                                context: context,
-                                barrierDismissible: true,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: IntrinsicWidth(
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            "Are you sure you want to delete?",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: 'Montserrat'),
-                                          ),
-                                          Divider(
-                                            color: Colors.black,
-                                            thickness: 2,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    content: SingleChildScrollView(
-                                        child: IntrinsicHeight(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text(
-                                              "No",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 25),
-                                            ),
-                                          ),
-                                          VerticalDivider(
-                                            color: Colors.black,
-                                            thickness: 2,
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text(
-                                              "Yes",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 25),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )),
-                                  );
-                                },
-                              );
-                            },
-                            child: Container(
-                              height: height * 0.05,
-                              width: width * 0.35,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    width: 1,
-                                    color: Colors.black,
-                                  )),
-                              child: Center(
-                                  child: Padding(
-                                padding: const EdgeInsets.only(left: 20.0),
-                                child: Text(
-                                  "Delete",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montserrat'),
-                                ),
-                              )),
-                            ),
-                          ),
+                          // GestureDetector(
+                          //   onTap: () async {
+                          //     showDialog<void>(
+                          //       context: context,
+                          //       barrierDismissible: true,
+                          //       builder: (BuildContext context) {
+                          //         return AlertDialog(
+                          //           title: IntrinsicWidth(
+                          //             child: Column(
+                          //               children: [
+                          //                 Text(
+                          //                   "What do you want to edit?",
+                          //                   style: TextStyle(
+                          //                       color: Colors.black,
+                          //                       fontWeight: FontWeight.w600,
+                          //                       fontFamily: 'Montserrat'),
+                          //                 ),
+                          //                 Divider(
+                          //                   color: Colors.black,
+                          //                   thickness: 2,
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //           content: SingleChildScrollView(
+                          //               child: IntrinsicHeight(
+                          //             child: Row(
+                          //               mainAxisAlignment:
+                          //                   MainAxisAlignment.spaceEvenly,
+                          //               children: [
+                          //                 TextButton(
+                          //                   onPressed: () {
+                          //                     Navigator.of(context).pop();
+                          //                   },
+                          //                   child: Text(
+                          //                     "One lecture",
+                          //                     style: TextStyle(
+                          //                         color: Colors.black,
+                          //                         fontWeight: FontWeight.bold,
+                          //                         fontSize: 15),
+                          //                   ),
+                          //                 ),
+                          //                 VerticalDivider(
+                          //                   color: Colors.black,
+                          //                   thickness: 2,
+                          //                 ),
+                          //                 TextButton(
+                          //                   onPressed: () {
+                          //                     Navigator.of(context).pop();
+                          //                   },
+                          //                   child: Text(
+                          //                     "Schedule",
+                          //                     style: TextStyle(
+                          //                         color: Colors.black,
+                          //                         fontWeight: FontWeight.bold,
+                          //                         fontSize: 15),
+                          //                   ),
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           )),
+                          //         );
+                          //       },
+                          //     );
+                          //   },
+                          //   child: Container(
+                          //     height: height * 0.05,
+                          //     width: width * 0.35,
+                          //     decoration: BoxDecoration(
+                          //         borderRadius: BorderRadius.circular(10),
+                          //         border: Border.all(
+                          //           width: 1,
+                          //           color: Colors.black,
+                          //         )),
+                          //     child: Center(
+                          //       child: Text(
+                          //         "Edit",
+                          //         style: TextStyle(
+                          //             color: Colors.black,
+                          //             fontWeight: FontWeight.bold,
+                          //             fontFamily: 'Montserrat'),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+                          // GestureDetector(
+                          //   onTap: () async {
+                          //     showDialog<void>(
+                          //       context: context,
+                          //       barrierDismissible: true,
+                          //       builder: (BuildContext context) {
+                          //         return AlertDialog(
+                          //           title: IntrinsicWidth(
+                          //             child: Column(
+                          //               children: [
+                          //                 Text(
+                          //                   "Are you sure you want to delete?",
+                          //                   style: TextStyle(
+                          //                       color: Colors.black,
+                          //                       fontWeight: FontWeight.w600,
+                          //                       fontFamily: 'Montserrat'),
+                          //                 ),
+                          //                 Divider(
+                          //                   color: Colors.black,
+                          //                   thickness: 2,
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //           content: SingleChildScrollView(
+                          //               child: IntrinsicHeight(
+                          //             child: Row(
+                          //               mainAxisAlignment:
+                          //                   MainAxisAlignment.spaceEvenly,
+                          //               children: [
+                          //                 TextButton(
+                          //                   onPressed: () {
+                          //                     Navigator.of(context).pop();
+                          //                   },
+                          //                   child: Text(
+                          //                     "No",
+                          //                     style: TextStyle(
+                          //                         color: Colors.black,
+                          //                         fontWeight: FontWeight.bold,
+                          //                         fontSize: 25),
+                          //                   ),
+                          //                 ),
+                          //                 VerticalDivider(
+                          //                   color: Colors.black,
+                          //                   thickness: 2,
+                          //                 ),
+                          //                 TextButton(
+                          //                   onPressed: () {
+                          //                     Navigator.of(context).pop();
+                          //                   },
+                          //                   child: Text(
+                          //                     "Yes",
+                          //                     style: TextStyle(
+                          //                         color: Colors.black,
+                          //                         fontWeight: FontWeight.bold,
+                          //                         fontSize: 25),
+                          //                   ),
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           )),
+                          //         );
+                          //       },
+                          //     );
+                          //   },
+                          //   child: Container(
+                          //     height: height * 0.05,
+                          //     width: width * 0.35,
+                          //     decoration: BoxDecoration(
+                          //         borderRadius: BorderRadius.circular(10),
+                          //         border: Border.all(
+                          //           width: 1,
+                          //           color: Colors.black,
+                          //         )),
+                          //     child: Center(
+                          //         child: Padding(
+                          //       padding: const EdgeInsets.only(left: 20.0),
+                          //       child: Text(
+                          //         "Delete",
+                          //         style: TextStyle(
+                          //             color: Colors.black,
+                          //             fontWeight: FontWeight.bold,
+                          //             fontFamily: 'Montserrat'),
+                          //       ),
+                          //     )),
+                          //   ),
+                          // ),
                         ],
                       ),
                       SizedBox(
-                        height: 15,
+                        height:60,
                       ),
                       Container(
                         height: 50,

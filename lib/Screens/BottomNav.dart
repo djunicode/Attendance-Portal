@@ -58,7 +58,7 @@ class _BottomNavState extends State<BottomNav> {
   int groupValue = 0;
   List<IconData> iconList = [
     Icons.home_filled,
-    Icons.calendar_month_sharp,
+    //Icons.calendar_month_sharp,
     Icons.person,
   ];
   int _selectedIndex = 0;
@@ -78,7 +78,7 @@ class _BottomNavState extends State<BottomNav> {
         accessToken: widget.accessToken,
         refreshToken: widget.refreshToken,
       ),
-      Calendar(),
+      //Calendar(),
       ProfilePage(
         accessToken: widget.accessToken,
         refreshToken: widget.accessToken,

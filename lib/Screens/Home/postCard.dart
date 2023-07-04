@@ -105,7 +105,7 @@ class _PostCardState extends State<PostCard> {
                   child: Text(
                     widget.subject!,
                     style: TextStyle(
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w700,
                         fontSize: 13,
                         fontFamily: 'Montserrat'),
                   ),

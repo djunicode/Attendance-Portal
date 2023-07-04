@@ -11,7 +11,8 @@ class AllCsvFilesScreen extends StatefulWidget {
 class _AllCsvFilesScreenState extends State<AllCsvFilesScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+        child: Scaffold(
       appBar: AppBar(title: Text("All CSV Files")),
       body: FutureBuilder(
         future: _getAllCsvFiles(),
@@ -45,7 +46,7 @@ class _AllCsvFilesScreenState extends State<AllCsvFilesScreen> {
           );
         },
       ),
-    );
+    ));
   }
 
   Future<List<FileSystemEntity>> _getAllCsvFiles() async {

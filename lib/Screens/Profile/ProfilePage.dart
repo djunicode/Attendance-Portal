@@ -105,39 +105,39 @@ class _ProfilePageState extends State<ProfilePage> {
                     SizedBox(
                       height: 10,
                     ),
-                    ListView.builder(
-                        physics: ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: snapshot.data![3],
-                        itemBuilder: (BuildContext context, int index) {
-                          int c = snapshot.data![3];
-                          return ListTile(
-                            contentPadding: EdgeInsets.fromLTRB(31, 5, 31, 5),
-                            shape: Border(
-                              bottom: BorderSide(),
-                            ),
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => LectureDetails()));
-                            },
-                            trailing: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.arrow_forward_ios),
-                            ),
-                            title: Text(
-                              "Sem ${snapshot.data![3]} ${snapshot.data![index + 4]}",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 16),
-                            ),
-                            subtitle: Text(
-                              snapshot.data![index + 2 * c + 4],
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 13),
-                            ),
-                          );
-                        }),
+                    // ListView.builder(
+                    //     physics: ClampingScrollPhysics(),
+                    //     shrinkWrap: true,
+                    //     itemCount: snapshot.data![3],
+                    //     itemBuilder: (BuildContext context, int index) {
+                    //       int c = snapshot.data![3];
+                    //       return ListTile(
+                    //         contentPadding: EdgeInsets.fromLTRB(31, 5, 31, 5),
+                    //         shape: Border(
+                    //           bottom: BorderSide(),
+                    //         ),
+                    //         onTap: () {
+                    //           Navigator.of(context).push(MaterialPageRoute(
+                    //               builder: (context) => LectureDetails()));
+                    //         },
+                    //         trailing: IconButton(
+                    //           onPressed: () {},
+                    //           icon: Icon(Icons.arrow_forward_ios),
+                    //         ),
+                    //         title: Text(
+                    //           "Sem ${snapshot.data![3]} ${snapshot.data![index + 4]}",
+                    //           style: TextStyle(
+                    //               fontWeight: FontWeight.w600,
+                    //               fontFamily: 'Montserrat',
+                    //               fontSize: 16),
+                    //         ),
+                    //         subtitle: Text(
+                    //           snapshot.data![index + 2 * c + 4],
+                    //           style: TextStyle(
+                    //               fontWeight: FontWeight.w400, fontSize: 13),
+                    //         ),
+                    //       );
+                    //     }),
                   ],
                 ),
               ),

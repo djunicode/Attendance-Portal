@@ -277,35 +277,23 @@ class _LogState extends State<Log> {
                                             width: 300,
                                             child: ElevatedButton(
                                               onPressed: () async {
-                                                if (formKey.currentState!
-                                                    .validate()) {
-                                                  sap = _sapController.text
-                                                      .trim();
-                                                  password = _passwordController
-                                                      .text
-                                                      .trim();
-                                                  tokens = await LoginGetTokens(
-                                                      sap, password);
+                                                if (formKey.currentState!.validate()) {
+                                                  sap = _sapController.text.trim();
+                                                  password = _passwordController.text.trim();
+                                                  tokens = await LoginGetTokens(sap, password);
                                                   print(tokens);
-                                                  if (tokens[0] == null) {
-                                                    Utils.showSnackBar(
-                                                        tokens[2]);
-                                                  } else {
+                                                  if (tokens[0] == null)
+                                                  {Utils.showSnackBar(tokens[2]);}
+                                                  else
+                                                  {
                                                     setState(() {
                                                       isLoading = !isLoading;
                                                     });
-                                                    SharedPreferences prefs =
-                                                        await SharedPreferences
-                                                            .getInstance();
-                                                    prefs.setString(
-                                                        'accessToken',
-                                                        tokens[1]);
-                                                    prefs.setString(
-                                                        'refreshToken',
-                                                        tokens[0]);
+                                                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                                                    prefs.setString('accessToken', tokens[1]);
+                                                    prefs.setString('refreshToken', tokens[0]);
                                                     prefs.setBool('flag', true);
-                                                    bool? boolValue =
-                                                        prefs.getBool('flag');
+                                                    bool? boolValue = prefs.getBool('flag');
                                                     print(boolValue);
                                                     Navigator.of(context).pop();
                                                     Navigator.of(context).push(

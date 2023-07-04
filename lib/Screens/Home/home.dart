@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../Models/getLectureDetails.dart';
+import 'RangeAttendance.dart';
 
 class Home extends StatefulWidget {
   String? refreshToken;
@@ -90,7 +91,7 @@ class _HomeState extends State<Home> {
                         padding: const EdgeInsets.fromLTRB(0.0, 19, 239, 0.0),
                         child: Text(snapshot.data!.Lectures[index].date,
                             style: TextStyle(
-                                fontWeight: FontWeight.w200, fontSize: 16)),
+                                fontWeight: FontWeight.w500, fontSize: 16)),
                       ),
                       PostCard(
                         refreshToken: widget.refreshToken,
@@ -134,15 +135,6 @@ class _HomeState extends State<Home> {
               fontSize: height * 0.045),
         ),
         actions: [
-          IconButton(
-              onPressed: () {
-                // Navigator.of(context).push(
-                //     MaterialPageRoute(builder: (context) => MentalHealth()));
-              },
-              icon: Icon(
-                Icons.filter_alt,
-                color: Colors.black,
-              )),
           IconButton(
               onPressed: () {
                 showModalBottomSheet(
@@ -201,10 +193,10 @@ class _HomeState extends State<Home> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    BatchDetails()),
+                                                    RangeAttendance()),
                                           );
                                         },
-                                        child: Text("Create a new batch",
+                                        child: Text("Get Attendance",
                                             style: TextStyle(
                                                 fontSize: height * 0.024,
                                                 fontWeight: FontWeight.w600))),
